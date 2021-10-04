@@ -35,6 +35,14 @@
   padding: 1rem 0;
   width: 10rem;
   color: $c-light;
+  opacity: 0;
+  left: -20px;
+  transition: all 0.5s ease;
+
+  body.loaded & {
+    opacity: 1;
+    left: 0;
+  }
 
   @media (min-width: $stop-scaling) {
     top: -5px;
@@ -130,6 +138,12 @@
 .page-header__nav {
   display: flex;
   align-items: center;
+  opacity: 0;
+  transition: all 0.8s ease;
+
+  body.loaded & {
+    opacity: 1;
+  }
 
   @media (max-width: $tablet) and (orientation: portrait) {
     position: fixed;
@@ -246,28 +260,27 @@
       content: "";
       position: absolute;
       bottom: 0;
-      width: 100%;
+      width: 0;
       height: 2px;
       background-color: $c-light;
-      display: none;
-      left: 0;
+      right: 0;
+      transition: width 0.5s ease-in-out;
 
       @media (max-width: $tablet) and (orientation: portrait) {
-        left: 0;
         right: 0;
         background-color: $c-dark;
       }
 
       @media (max-width: $mobile) and (orientation: landscape) {
-        left: 0;
         right: 0;
         background-color: $c-dark;
       }
     }
 
-    &.active {
+    body.loaded &.active {
       &::after {
-        display: block;
+        left: 0;
+        width: 100%;
       }
     }
 
