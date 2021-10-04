@@ -40,6 +40,10 @@
     .slider__item-text {
       align-self: flex-end;
 
+      @media (min-width: $tablet) {
+        transition-delay: 0.3s;
+      }
+
       @media (max-width: $mobile) and (orientation: landscape) {
         align-self: flex-start;
       }
@@ -96,6 +100,39 @@
   max-width: 34rem;
   font-size: 1.8rem;
   line-height: 2rem;
+  position: relative;
+  opacity: 1;
+  right: 0;
+  transition: right 0.3s ease-in-out, opacity 0.5s ease-in-out;
+
+  @media (max-width: $tablet) {
+    .screen.screen--story:not(.active) &,
+    .swiper-slide:not(.swiper-slide-active) & {
+      opacity: 0;
+      right: -40px;
+    }
+
+    .swiper-slide.swiper-slide-active {
+      opacity: 1;
+      right: 0;
+    }
+  }
+
+  @media (min-width: $tablet) {
+    .screen.screen--story:not(.active) &,
+    .swiper-slide:not(.swiper-slide-active) &,
+    .swiper-slide:not(.swiper-slide-next) & {
+      opacity: 0;
+      right: -40px;
+    }
+
+    .swiper-slide.swiper-slide-active &,
+    .swiper-slide.swiper-slide-next & {
+      opacity: 1;
+      right: 0;
+    }
+  }
+
 
   @media (min-width: $stop-scaling) {
     margin-top: 36px;

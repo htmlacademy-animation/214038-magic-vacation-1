@@ -43,6 +43,13 @@
   border: 0;
   border-radius: 3rem;
   outline: none;
+  transition: all 0.3s ease-in-out;
+  margin-left: auto;
+
+  .screen.screen--game:not(.active) & {
+    padding: 0;
+    width: 0;
+  }
 
   &:focus {
     border: 1px solid $c-purple;
@@ -79,7 +86,7 @@
 }
 
 .form__button {
-  flex-grow: 1;
+  width: 240px;
 
   @media (orientation: portrait) {
     position: relative;
