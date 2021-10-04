@@ -52,7 +52,7 @@
     height: 2.2rem;
   }
 
-  &:hover,
+  body.loaded &:hover,
   .social-block--active & {
     color: $c-purple;
 
@@ -260,9 +260,7 @@
   .social-block__link {
     opacity: 1;
     bottom: 0;
-  }
 
-  .social-block__link {
     &--fb {
       transition-delay: 150ms;
     }
