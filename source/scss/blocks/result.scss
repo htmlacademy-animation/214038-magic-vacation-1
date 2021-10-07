@@ -152,18 +152,6 @@
     animation-timing-function: ease-in-out;
     animation-delay: 1.3s;
   }
-
-  //.result--prize .form__field {
-  //  animation-name: show-input-field, show-input-text;
-  //  animation-duration: 0.3s, 0.3s;
-  //  animation-fill-mode: forwards, both;
-  //  animation-timing-function: ease-in-out, ease-in-out;
-  //  animation-delay: 1.7s, 1.9s;
-  //}
-}
-
-.screen--result:not(.screen--show) .form__field {
-  //max-width: 50px;
 }
 
 .result__title {
