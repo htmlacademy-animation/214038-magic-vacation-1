@@ -296,6 +296,39 @@
         width: 100%;
       }
     }
+
+    body.second & {
+      &:hover,
+      &:focus {
+        color: #56a1ff;
+
+        &::after {
+          background-color: #56a1ff;
+        }
+      }
+    }
+
+    body.third & {
+      &:hover,
+      &:focus {
+        color: #66bcd6;
+
+        &::after {
+          background-color: #66bcd6;
+        }
+      }
+    }
+
+    body.fourth & {
+      &:hover,
+      &:focus {
+        color: #ca7af3;
+
+        &::after {
+          background-color: #ca7af3;
+        }
+      }
+    }
   }
 }
 

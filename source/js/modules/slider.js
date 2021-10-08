@@ -6,6 +6,8 @@ export default () => {
   sliderContainer.style.backgroundImage = `url("img/slide1.jpg"), linear-gradient(180deg, rgba(83, 65, 118, 0) 0%, #523E75 16.85%)`;
 
   const setSlider = function () {
+    const body = document.body;
+
     if (((window.innerWidth / window.innerHeight) < 1) || window.innerWidth < 769) {
       storySlider = new Swiper(`.js-slider`, {
         pagination: {
@@ -52,12 +54,20 @@ export default () => {
         on: {
           slideChange: () => {
             if (storySlider.activeIndex === 0) {
+              body.classList.remove(`second`, `third`, `fourth`);
+              body.classList.add(`first`);
               sliderContainer.style.backgroundImage = `url("img/slide1.jpg")`;
             } else if (storySlider.activeIndex === 2) {
+              body.classList.remove(`first`, `third`, `fourth`);
+              body.classList.add(`second`);
               sliderContainer.style.backgroundImage = `url("img/slide2.jpg")`;
             } else if (storySlider.activeIndex === 4) {
+              body.classList.remove(`first`, `second`, `fourth`);
+              body.classList.add(`third`);
               sliderContainer.style.backgroundImage = `url("img/slide3.jpg")`;
             } else if (storySlider.activeIndex === 6) {
+              body.classList.add(`fourth`);
+              body.classList.remove(`first`, `third`, `second`);
               sliderContainer.style.backgroundImage = `url("img/slide4.jpg")`;
             }
           },
