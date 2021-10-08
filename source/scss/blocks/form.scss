@@ -137,11 +137,11 @@
     animation-duration: 0.3s;
     animation-fill-mode: both;
     animation-timing-function: ease-in-out;
-    animation-delay: 1.5s;
+    animation-delay: 1s;
 
     &::placeholder {
       opacity: 0;
-      transition: opacity 0.3s ease 1.7s;
+      transition: opacity 0.3s ease 1.2s;
 
       .screen--show & {
         opacity: 1;
