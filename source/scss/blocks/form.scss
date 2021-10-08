@@ -132,7 +132,21 @@
 
 .form--result {
   .form__field {
-    width: calc(100% - 31rem);
+    width: 0;
+    animation-name: show-input-field;
+    animation-duration: 0.3s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
+    animation-delay: 1s;
+
+    &::placeholder {
+      opacity: 0;
+      transition: opacity 0.3s ease 1.2s;
+
+      .screen--show & {
+        opacity: 1;
+      }
+    }
 
     @media (min-width: $stop-scaling) {
       width: calc(100% - 310px);
@@ -149,5 +163,20 @@
     @media (max-width: $mobile) and (orientation: landscape) {
       width: calc(100% - 5rem);
     }
+  }
+}
+
+@keyframes show-input-field {
+  0% {
+    opacity: 0;
+    width: 0;
+  }
+
+  10% {
+    opacity: 1;
+  }
+
+  100% {
+    width: calc(100% - 31rem);
   }
 }

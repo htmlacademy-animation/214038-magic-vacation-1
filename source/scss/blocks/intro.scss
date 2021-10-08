@@ -96,7 +96,7 @@
   position: relative;
   opacity: 1;
   bottom: 0;
-  transition: bottom 0.5s ease-in-out, opacity 1s ease-in-out;
+  transition: bottom 0.5s ease-in-out 0.5s, opacity 1s ease-in-out 0.5s;
 
   .screen.screen--intro:not(.active) & {
     opacity: 0;

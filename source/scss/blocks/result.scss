@@ -46,11 +46,111 @@
   }
 
   img {
+    position: absolute;
     display: block;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+  }
+
+  img.flamingo {
+    z-index: 5;
+    max-width: 350px;
+    height: auto;
+    left: calc(50% - 300px);
+    bottom: 0;
+    animation-name: show-flamingo, move-flamingo;
+    animation-duration: 0.3s, 1.5s;
+    animation-fill-mode: both, forwards;
+    animation-timing-function: ease-in-out, ease-in-out;
+    animation-delay: 1s, 1.4s;
+    animation-iteration-count: 1, infinite;
+    animation-direction: normal, alternate;
+  }
+
+  img.suitcase {
+    z-index: 4;
+    max-width: 420px;
+    height: auto;
+    left: calc(50% - 260px);
+    bottom: 0;
+  }
+
+  img.leaf-blue-2 {
+    z-index: 3;
+    max-width: 380px;
+    height: auto;
+    bottom: 250px;
+    left: calc(50% - 440px);
+  }
+
+  img.leaf-blue-1 {
+    z-index: 3;
+    max-width: 380px;
+    height: auto;
+    bottom: 310px;
+    left: calc(50% + 10px);
+  }
+
+  img.leaf-green {
+    z-index: 3;
+    max-width: 420px;
+    height: auto;
+    bottom: 310px;
+    left: calc(50% - 30px);
+  }
+}
+
+.screen--result.screen--show {
+  img.flamingo {
+    animation-name: show-flamingo, move-flamingo;
+    animation-duration: 0.4s, 1.5s;
+    animation-fill-mode: both, forwards;
+    animation-timing-function: ease-in-out, ease-in-out;
+    animation-delay: 0.45s, 0.9s;
+    animation-iteration-count: 1, infinite;
+    animation-direction: normal, alternate;
+  }
+
+  img.suitcase {
+    animation-name: show-suitcase;
+    animation-duration: 0.7s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.5s;
+  }
+
+  img.leaf-blue-2 {
+    animation-name: show-leaf-2;
+    animation-duration: 2s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.5s;
+  }
+
+  img.leaf-blue-1 {
+    animation-name: show-leaf-1;
+    animation-duration: 1.8s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.5s;
+  }
+
+  img.leaf-green {
+    animation-name: show-green;
+    animation-duration: 1.5s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.6s;
+  }
+
+  .result--prize .form__button.btn {
+    animation-name: show-btn;
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
+    animation-delay: 0.8s;
   }
 }
 
@@ -266,5 +366,154 @@
     @media (max-width: $mobile) and (orientation: landscape) {
       width: 45rem;
     }
+  }
+}
+
+@keyframes show-flamingo {
+  0% {
+    opacity: 0;
+    transform: translateY(70px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(-250px);
+  }
+}
+
+@keyframes move-flamingo {
+  from {
+    transform: rotate(0) translate(0, -250px);
+  }
+
+  to {
+    transform: rotate(-3deg) translate(-4px, -210px);
+  }
+}
+
+@keyframes show-suitcase {
+  0% {
+    transform: translateY(70px) scale(0);
+  }
+
+  50% {
+    transform: translateY(-300px) scale(1.2);
+  }
+
+  100% {
+    transform: translateY(-250px) scale(1);
+  }
+}
+
+@keyframes show-leaf-2 {
+  0% {
+    opacity: 0;
+    transform: rotate(25deg);
+  }
+
+  20% {
+    transform: rotate(-20deg);
+  }
+
+  40% {
+    transform: rotate(15deg);
+  }
+
+  60% {
+    opacity: 1;
+    transform: rotate(-10deg);
+  }
+
+  80% {
+    transform: rotate(5deg);
+  }
+
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes show-leaf-1 {
+  0% {
+    opacity: 0;
+    transform: rotate(-20deg);
+  }
+
+  20% {
+    transform: rotate(20deg);
+  }
+
+  40% {
+    transform: rotate(-15deg);
+  }
+
+  60% {
+    opacity: 1;
+    transform: rotate(10deg);
+  }
+
+  80% {
+    transform: rotate(-5deg);
+  }
+
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes show-green {
+  0% {
+    opacity: 0;
+    transform: rotate(-15deg);
+  }
+
+  20% {
+    transform: rotate(10deg);
+  }
+
+  40% {
+    transform: rotate(-5deg);
+  }
+
+  60% {
+    opacity: 1;
+    transform: rotate(3deg);
+  }
+
+  80% {
+    transform: rotate(-1deg);
+  }
+
+  100% {
+    transform: none;
+  }
+}
+
+@keyframes show-btn {
+  0% {
+    opacity: 0;
+    color: #ffffff;
+  }
+
+  50% {
+    opacity: 1;
+    color: #ffffff;
+  }
+
+
+  100% {
+    color: $c-dark;
+  }
+}
+
+@keyframes show-text {
+  0% {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
