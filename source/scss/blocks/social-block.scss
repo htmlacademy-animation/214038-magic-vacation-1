@@ -60,6 +60,30 @@
       width: 112.5%;
       height: 112.5%;
     }
+
+    body.second & {
+      color: #56a1ff;
+    }
+
+    body.third & {
+      color: #66bcd6;
+    }
+
+    body.fourth & {
+      color: #ca7af3;
+    }
+  }
+
+  body.second & {
+    color: #1453a2;
+  }
+
+  body.third & {
+    color: #598e9e;
+  }
+
+  body.fourth & {
+    color: #7c35a0;
   }
 
   &:focus {
@@ -199,6 +223,18 @@
 
   &:hover {
     color: $c-purple;
+
+    body.second & {
+      color: #56a1ff;
+    }
+
+    body.third & {
+      color: #66bcd6;
+    }
+
+    body.fourth & {
+      color: #ca7af3;
+    }
   }
 
   &:focus {

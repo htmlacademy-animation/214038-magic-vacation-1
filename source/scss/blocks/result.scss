@@ -216,6 +216,22 @@
   line-height: 1.2;
   color: $c-light;
 
+  .screen--result.screen--show & {
+    animation-name: show-btn-play;
+    animation-duration: 0.7s;
+    animation-fill-mode: both;
+    animation-timing-function: ease-in-out;
+    animation-delay: 1s;
+
+    span {
+      animation-name: move-btn-play-round;
+      animation-duration: 0.4s;
+      animation-fill-mode: both;
+      animation-timing-function: ease-in-out;
+      animation-delay: 1s;
+    }
+  }
+
   @media (min-width: $stop-scaling) {
     margin: auto auto 10px;
     min-width: 340px;
@@ -506,14 +522,22 @@
   }
 }
 
-@keyframes show-text {
+@keyframes show-btn-play {
   0% {
     opacity: 0;
-    transform: translateX(20px);
   }
 
   100% {
     opacity: 1;
-    transform: translateX(0);
+  }
+}
+
+@keyframes move-btn-play-round {
+  0% {
+    transform: translateX(50px) rotate(90deg);
+  }
+
+  100% {
+    transform: none;
   }
 }

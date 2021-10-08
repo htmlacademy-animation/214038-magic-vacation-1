@@ -171,6 +171,12 @@
   justify-content: space-between;
   width: 17rem;
   z-index: 1;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+
+  .screen--story.active & {
+    opacity: 1;
+  }
 
   @media (min-width: $stop-scaling) {
     bottom: 28px;
@@ -192,6 +198,24 @@
   width: 4rem;
   height: 4rem;
   color: $c-dark;
+
+  .screen--story.active & {
+    opacity: 1;
+
+    &.slider__control--prev {
+      animation-name: move-control-left;
+      animation-duration: 0.4s;
+      animation-fill-mode: both;
+      animation-timing-function: ease-in-out;
+    }
+
+    &.slider__control--next {
+      animation-name: move-control-right;
+      animation-duration: 0.4s;
+      animation-fill-mode: both;
+      animation-timing-function: ease-in-out;
+    }
+  }
 
   @media (min-width: $stop-scaling) {
     width: 40px;
@@ -270,6 +294,12 @@
   font-weight: 400;
   font-size: 2.4rem;
   line-height: 4rem;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+
+  .screen--story.active & {
+    opacity: 1;
+  }
 
   @media (min-width: $stop-scaling) {
     bottom: 28px;
@@ -311,5 +341,25 @@
       height: 0.4rem;
       background-color: $c-light;
     }
+  }
+}
+
+@keyframes move-control-left {
+  0% {
+    transform: translateX(-80px) rotate(-220deg);
+  }
+
+  100% {
+    transform: translateX(0) rotate(0);
+  }
+}
+
+@keyframes move-control-right {
+  0% {
+    transform: translateX(80px) rotate(220deg);
+  }
+
+  100% {
+    transform: translateX(0) rotate(0);
   }
 }
