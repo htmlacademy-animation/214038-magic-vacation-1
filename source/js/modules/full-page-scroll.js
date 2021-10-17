@@ -87,6 +87,13 @@ export default class FullPageScroll {
     setTimeout(() => {
       this.screenElements[this.activeScreen].classList.add(`active`);
     }, 100);
+
+    // generate random path for  prizes svg. For start img animation after open prize screen
+    if (this.screenElements[this.activeScreen][`id`] === `prizes`) {
+      document.querySelectorAll(`.prizes__list img`).forEach((element) => {
+        element.src = `${element.src}?${Math.floor(Math.random() * 1000000000)}`;
+      });
+    }
   }
 
   changeActiveMenuItem() {
