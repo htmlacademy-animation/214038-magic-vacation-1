@@ -14,6 +14,7 @@ export default () => {
         });
         targetEl[0].classList.add(`screen--show`);
         targetEl[0].classList.remove(`screen--hidden`);
+        initAnimationSlogan(targetEl[0]);
       });
     }
 
@@ -29,4 +30,70 @@ export default () => {
       });
     }
   }
+
+  const createSvgAnimationEl = (tag, attrs) => {
+    const el = document.createElementNS(`http://www.w3.org/2000/svg`, tag);
+
+    attrs.forEach((attr) => {
+      el.setAttribute(attr.name, attr.value);
+    });
+
+    return el;
+  };
+
+  const createAnimateStrokeDasharray = (letter, length, index, isFailAnimation) => {
+    const animate = createSvgAnimationEl(`animate`, [
+      {name: `attributeName`, value: `stroke-dasharray`},
+      {name: `from`, value: `0, ${length}`},
+      {name: `to`, value: `${length}, 0`},
+      {name: `dur`, value: `500ms`},
+      {name: `fill`, value: `freeze`}
+    ]);
+
+    letter.appendChild(animate);
+
+    if (isFailAnimation) {
+      setTimeout(() => {
+        animate.beginElement();
+      }, 80 * (index + 1));
+    } else {
+      animate.beginElement();
+    }
+  };
+
+  const createAnimateOpacity = (letter, length, index) => {
+    const animate = createSvgAnimationEl(`animate`, [
+      {name: `attributeName`, value: `opacity`},
+      {name: `from`, value: `0`},
+      {name: `to`, value: `1`},
+      {name: `dur`, value: `1ms`},
+      {name: `fill`, value: `freeze`}
+    ]);
+
+    setTimeout(() => {
+      letter.appendChild(animate);
+      letter.classList.add(`start-translate`);
+      animate.beginElement();
+    }, 80 * (index + 1));
+  };
+
+  const initAnimationSlogan = (element) => {
+    const isFailAnimation = element.getAttribute(`id`) === `result3`;
+
+    const svgVictorySlogan = element.querySelector(`#game-slogan`);
+    const letters = svgVictorySlogan.querySelectorAll(`path`);
+
+    letters.forEach((letter, index) => {
+      const pathLength = letter.getTotalLength();
+      const length = pathLength / 3;
+      letter.setAttribute(`stroke-dasharray`, `0, ${length}`);
+
+      if (isFailAnimation) {
+        createAnimateStrokeDasharray(letter, length, index, isFailAnimation);
+        createAnimateOpacity(letter, length, index);
+      } else {
+        createAnimateStrokeDasharray(letter, length);
+      }
+    });
+  };
 };

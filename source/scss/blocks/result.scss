@@ -152,6 +152,27 @@
     animation-timing-function: ease-in-out;
     animation-delay: 0.8s;
   }
+
+  .result--trip .result__title,
+  .result--prize .result__title {
+    animation-name: scale-animation-slogan;
+    animation-duration: 1s;
+    animation-fill-mode: both;
+    animation-timing-function: ease;
+  }
+
+  .result--negative .result__title path {
+    opacity: 0;
+
+    &.start-translate {
+      opacity: 0;
+      animation-name: translate-animation-slogan;
+      animation-duration: 0.5s;
+      animation-delay: 0.1s;
+      animation-fill-mode: both;
+      animation-timing-function: ease-in;
+    }
+  }
 }
 
 .result__title {
@@ -539,5 +560,35 @@
 
   100% {
     transform: none;
+  }
+}
+
+@keyframes scale-animation-slogan {
+  from {
+    opacity: 0;
+    transform: scale(1.2);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes translate-animation-slogan {
+  0% {
+    transform: translateY(0);
+  }
+
+  60% {
+    transform: translateY(120px);
+  }
+
+  85% {
+    transform: translateY(90px);
+  }
+
+  100% {
+    transform: translateY(100px);
   }
 }
