@@ -9,8 +9,7 @@ export default class CounterAnimation {
     this.lastUpdateTime = Date.now();
     this.animationCounter = null;
     this.seconds = 0;
-    this.minutes = 0;
-    this.maxMinutes = 5;
+    this.minutes = 5;
   }
 
   startCounter() {
@@ -40,17 +39,17 @@ export default class CounterAnimation {
   }
 
   draw() {
-    this.seconds += 1;
-
-    if (this.seconds === 60) {
-      this.seconds = 0;
-      this.minutes += 1;
+    if (this.seconds === 0) {
+      this.seconds = 59;
+      this.minutes -= 1;
+    } else {
+      this.seconds -= 1;
     }
 
     this.minutesElement.innerText = this.prepareValue(this.minutes);
     this.secondsElement.innerText = this.prepareValue(this.seconds);
 
-    if (this.minutes === this.maxMinutes) {
+    if (this.minutes === 0 && this.seconds === 0) {
       this.stopCounter();
     }
   }
