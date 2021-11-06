@@ -3,7 +3,7 @@
     <animate
       attributeType="CSS"
       attributeName="opacity"
-      begin="1900ms"
+      begin="7000ms"
       from="1"
       to="0"
       dur="400ms"
@@ -14,23 +14,15 @@
       dur="500ms"
       fill="freeze"
       values="0,0; 0, -50"
-      begin="1700ms"
+      begin="6700ms"
     />
 
-    <g id="cloud-left" opacity="0">
-      <animate
-        attributeType="CSS"
-        attributeName="opacity"
-        begin="0s"
-        to="1"
-        dur="800ms"
-        fill="freeze"
-      />
-
+    <g id="cloud-left">
       <animateMotion
         dur="500ms"
         fill="freeze"
         values="50,0; 0, 0"
+        begin="4800ms"
       />
 
       <line x1="65.43" y1="77.72" x2="105.21" y2="77.72" fill="none" stroke="#fff" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2"/>
@@ -40,20 +32,12 @@
       </g>
     </g>
 
-    <g id="clouds-two" >
-      <animate
-        attributeType="CSS"
-        attributeName="opacity"
-        begin="0s"
-        to="1"
-        dur="800ms"
-        fill="freeze"
-      />
-
+    <g id="clouds-two">
       <animateMotion
         dur="600ms"
         fill="freeze"
         values="50,0; -50, 0"
+        begin="4800ms"
       />
 
       <g id="cloud-right">
@@ -80,6 +64,7 @@
         values="0 160 240; 4 160 240; -4 160 240; 0 160 240"
         dur="2s"
         repeatCount="3"
+        begin="4800ms"
       />
     </path>
     <path d="M263,327.88s-4.91-70.27,5.54-80.72" fill="none" stroke="#e81a5a" stroke-miterlimit="10" stroke-width="2"/>
@@ -89,7 +74,7 @@
     <animate
       attributeType="CSS"
       attributeName="opacity"
-      begin="500ms"
+      begin="5000ms"
       to="1"
       dur="100ms"
       fill="freeze"
@@ -98,7 +83,7 @@
     <animateMotion
       path="M0,0c24.19,-9.24,29.8,-15.84,29.42,-20.44c-1.24,-15.13,-69.69,-38.78,-112.42,-6.56c-2.93,2.21,-31.66,24.52,-29,54c3.54,39.18,59.83,61.15,75.7,67.35c53.65,20.94,94.43,8.79,101.78,27.18c2.89,7.25,0.78,19.69,-21.48,42.47"
       calcMode="linear"
-      begin="500ms"
+      begin="5000ms"
       keyPoints="0; 0.09; 0.09; 1"
       keyTimes="0; 0.1983; 0.3226; 1"
       dur="2000ms"
@@ -128,7 +113,7 @@
       dur="2000ms"
       fill="freeze"
       additive="sum"
-      begin="500ms"
+      begin="5000ms"
     />
 
     <animateTransform
@@ -139,7 +124,7 @@
       keySplines="0 0 0.58 1.0"
       fill="freeze"
       additive="sum"
-      begin="500ms"
+      begin="5000ms"
     />
 
     <animateTransform
@@ -154,7 +139,7 @@
       dur="2000ms"
       fill="freeze"
       additive="sum"
-      begin="500ms"
+      begin="5000ms"
     />
 
     <animateTransform
@@ -165,7 +150,7 @@
       keySplines="0 0 0.58 1.0"
       fill="freeze"
       additive="sum"
-      begin="500ms"
+      begin="5000ms"
     />
 
     <g>
@@ -206,10 +191,11 @@
       keyTimes="0; 0.1; 0.25; 0.4; 0.55; 0.8; 1"
       fill="freeze"
       additive="sum"
+      begin="4800ms"
     />
 
     <animateTransform
-      begin="2.5s"
+      begin="7000ms"
       attributeName="transform"
       type="rotate"
       values="0 160 240; 7  160 240; -5 160 240; 4 160 240; -2 160 240; 1 160 240; 0 160 240"

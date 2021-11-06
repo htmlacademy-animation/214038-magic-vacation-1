@@ -1,25 +1,33 @@
-export default class CounterAnimation {
+export default class CounterPrizesAnimation {
   constructor(
-      selector
+      selector,
+      minNumber,
+      maxNumber,
+      delay
   ) {
-    this.secondsElement = selector[1];
-    this.minutesElement = selector[0];
-    this.fpsInterval = 1000;
+    this.element = selector;
+    this.fpsInterval = 1000 / 12;
     this.elapsed = 0;
     this.lastUpdateTime = Date.now();
     this.animationCounter = null;
-    this.seconds = 0;
-    this.minutes = 5;
+    this.number = minNumber;
+    this.maxNumber = maxNumber;
+    this.delay = delay;
   }
 
   startCounter() {
-    this.tick();
+    if (window.innerWidth > 1024) {
+      this.element.innerText = this.number;
+
+      setTimeout(()=> {
+        this.tick();
+      }, this.delay);
+    }
   }
 
   stopCounter() {
     cancelAnimationFrame(this.animationCounter);
-    this.minutesElement.innerText = `05`;
-    this.secondsElement.innerText = `00`;
+    this.element.innerText = this.maxNumber;
   }
 
   tick() {
@@ -39,17 +47,12 @@ export default class CounterAnimation {
   }
 
   draw() {
-    if (this.seconds === 0) {
-      this.seconds = 59;
-      this.minutes -= 1;
-    } else {
-      this.seconds -= 1;
-    }
+    const step = Math.round((this.fpsInterval * this.maxNumber) / 1000);
 
-    this.minutesElement.innerText = this.prepareValue(this.minutes);
-    this.secondsElement.innerText = this.prepareValue(this.seconds);
+    this.number += step;
+    this.element.innerText = this.number;
 
-    if (this.minutes === 0 && this.seconds === 0) {
+    if (this.number >= this.maxNumber) {
       this.stopCounter();
     }
   }
