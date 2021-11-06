@@ -15,7 +15,7 @@
     <animate
       attributeType="CSS"
       attributeName="opacity"
-      begin="0.4s"
+      begin="8s"
       to="1"
       dur="1ms"
       fill="freeze"
@@ -35,7 +35,7 @@
         type="rotate"
         values="50 170 300; 0 170 300; 10 170 300; 2 170 300; 8 170 300; 3 170 300; 6 170 300; 4 170 300; 5 170 300"
         dur="3s"
-        begin="0.4s"
+        begin="8s"
         calcMode="spline"
         keyTimes="0; 0.3; 0.45; 0.58; 0.7; 0.8; 0.86; 0.94; 1"
         keySplines="0.72 0.3 0.84 0.68;
@@ -60,7 +60,7 @@
       <animate
         attributeType="CSS"
         attributeName="opacity"
-        begin="0.4s"
+        begin="8s"
         to="1"
         dur="1ms"
         fill="freeze"
@@ -78,7 +78,7 @@
                       0.35 0 0.77 0.95;
                       0.35 0 0.77 0.95;
                       0.35 0 0.77 0.95"
-        begin="0.4s"
+        begin="08s"
         dur="2.5s"
         fill="freeze"
       />
@@ -95,7 +95,7 @@
                       0.42, 0, 0.58, 1.0;
                       0.42, 0, 0.58, 1.0;
                       0.42, 0, 0.58, 1.0"
-        begin="0.4s"
+        begin="08s"
         dur="2.5s"
         fill="freeze"
       />
@@ -107,7 +107,7 @@
         type="translate"
         values="30 140; 0 0; 5 30; -5 3; -1 22; 3 3; 1 9; 0 0"
         dur="2.5s"
-        begin="0.4s"
+        begin="8s"
         calcMode="spline"
         keyTimes="0; 0.3; 0.45; 0.57; 0.7; 0.81; 0.92; 1"
         keySplines="0.72 0.3 0.84 0.68;
@@ -125,7 +125,7 @@
         type="rotate"
         values="30 30 140; -8 30 140; 0 30 140; 3 30 140; -2 30 140; 1 30 140; -1 30 140; 0 30 140"
         dur="2.5s"
-        begin="0.4s"
+        begin="8s"
         calcMode="spline"
         keyTimes="0; 0.3; 0.45; 0.57; 0.7; 0.81; 0.92; 1"
         keySplines="0.72 0.3 0.84 0.68;
@@ -157,7 +157,7 @@
         values="-70 70; 0 0;"
         keySplines="0.35 0 0.77 0.95"
         dur="0.5s"
-        begin="0.4s"
+        begin="8s"
         fill="freeze"
         additive="sum"
       />
@@ -169,7 +169,7 @@
         values="-20 279 173; 10 279 173;"
         keySplines="0.35 0 0.77 0.95"
         dur="0.5s"
-        begin="0.4s"
+        begin="8s"
         fill="freeze"
         additive="sum"
       />
@@ -185,7 +185,7 @@
                     0.35 0 0.77 0.95;
                     0.35 0 0.77 0.95"
         dur="2s"
-        begin="1s"
+        begin="8.6s"
         repeatCount="indefinite"
         additive="sum"
       />
@@ -198,7 +198,7 @@
         dur="2s"
         repeatCount="indefinite"
         additive="sum"
-        begin="1s"
+        begin="8.6s"
       />
 
       <path id="wings" d="M279.2,183.8A4.89,4.89,0,0,1,283,179h0l21.07-5.4c-7.78,14.84-19.18,15.07-20,15.07h0a4.9,4.9,0,0,1-4.85-4.9" fill="#fff">
@@ -217,7 +217,7 @@
           dur="0.1s"
           repeatCount="indefinite"
           additive="sum"
-          begin="0.6s"
+          begin="8.2s"
         />
 
         <animateTransform
@@ -239,7 +239,7 @@
         type="rotate"
         values="50 170 300; 0 170 300; 10 170 300; 2 170 300; 9 170 300; 3 170 300; 6 170 300; 4 170 300; 3 170 300"
         dur="3.5s"
-        begin="0.4s"
+        begin="8s"
         calcMode="spline"
         keyTimes="0; 0.2; 0.35; 0.45; 0.55; 0.65; 0.75; 0.85; 1"
         keySplines="0.72 0.3 0.84 0.68;
@@ -268,7 +268,7 @@
         type="rotate"
         values="50 170 300; 0 170 300; 10 170 300; 2 170 300; 9 170 300; 3 170 300; 6 170 300; 4 170 300; 3 170 300"
         dur="4.5s"
-        begin="0.4s"
+        begin="8s"
         calcMode="spline"
         keyTimes="0; 0.2; 0.35; 0.45; 0.55; 0.65; 0.75; 0.85; 1"
         keySplines="0.72 0.3 0.84 0.68;

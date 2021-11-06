@@ -1,5 +1,6 @@
 import throttle from 'lodash/throttle';
 import CounterAnimation from './counter';
+import CounterPrizesAnimation from './counter-prizes';
 
 export default class FullPageScroll {
   constructor() {
@@ -14,6 +15,8 @@ export default class FullPageScroll {
     this.onScrollHandler = this.onScroll.bind(this);
     this.onUrlHashChengedHandler = this.onUrlHashChanged.bind(this);
     this.counterAnimation = null;
+    this.counterCasesAnimation = null;
+    this.counterCodesAnimation = null;
   }
 
   init() {
@@ -95,6 +98,12 @@ export default class FullPageScroll {
       document.querySelectorAll(`.prizes__list img`).forEach((element) => {
         element.src = `${element.src}?${Math.floor(Math.random() * 1000000000)}`;
       });
+
+      this.counterCasesAnimation = new CounterPrizesAnimation(document.querySelector(`.prizes__item--cases .prizes__desc > b`), 1, 7, 6800);
+      this.counterCasesAnimation.startCounter();
+
+      this.counterCodesAnimation = new CounterPrizesAnimation(document.querySelector(`.prizes__item--codes .prizes__desc > b`), 11, 900, 7800);
+      this.counterCodesAnimation.startCounter();
     }
 
     this.initCounter(this.screenElements[this.activeScreen][`id`]);
@@ -112,7 +121,7 @@ export default class FullPageScroll {
       this.counterAnimation.startCounter();
     }
 
-    if (activeScreen !== `game`) {
+    if (activeScreen !== `game` && this.counterAnimation) {
       this.counterAnimation.stopCounter();
       this.counterAnimation = null;
     }
