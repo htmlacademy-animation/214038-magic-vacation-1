@@ -192,6 +192,9 @@ export default class Scene2D {
     if (isContextTransforming) {
       this.ctx.restore();
     }
+
+    object.widthImg = width;
+    object.heightImg = height;
   }
 
   clearScene() {
