@@ -1,4 +1,5 @@
 import Scene2DSeaCalf from './canvas/scene-2d-sea-calf';
+import SceneFail from './canvas/scene-2d-crocodile';
 
 export default () => {
   let showResultEls = document.querySelectorAll(`.js-show-result`);
@@ -22,6 +23,12 @@ export default () => {
           const sceneCanvasAnimation = new Scene2DSeaCalf();
 
           sceneCanvasAnimation.beginAnimation();
+        }
+
+        if (targetEl[0].id === `result3`) {
+          const sceneFailAnimation = new SceneFail();
+
+          sceneFailAnimation.beginAnimation();
         }
       });
     }
@@ -97,8 +104,10 @@ export default () => {
       letter.setAttribute(`stroke-dasharray`, `0, ${length}`);
 
       if (isFailAnimation) {
-        createAnimateStrokeDasharray(letter, length, index, isFailAnimation);
-        createAnimateOpacity(letter, length, index);
+        setTimeout(() => {
+          createAnimateStrokeDasharray(letter, length, index, isFailAnimation);
+          createAnimateOpacity(letter, length, index);
+        }, 500);
       } else {
         createAnimateStrokeDasharray(letter, length);
       }
