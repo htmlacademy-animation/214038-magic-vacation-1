@@ -1,9 +1,15 @@
 import Swiper from "swiper";
+import Story from "./three-js/store";
 
 export default () => {
   let storySlider;
-  let sliderContainer = document.getElementById(`story`);
-  sliderContainer.style.backgroundImage = `url("img/slide1.jpg"), linear-gradient(180deg, rgba(83, 65, 118, 0) 0%, #523E75 16.85%)`;
+
+  const storyDog = new Story(`canvas-story`, `./img/module-5/scenes-textures/scene-1.png`);
+  storyDog.init();
+
+  const storyCase = new Story(`canvas-story`, `./img/module-5/scenes-textures/scene-2.png`);
+  const storyPyramid = new Story(`canvas-story`, `./img/module-5/scenes-textures/scene-3.png`);
+  const storyAi = new Story(`canvas-story`, `./img/module-5/scenes-textures/scene-4.png`);
 
   const setSlider = function () {
     const body = document.body;
@@ -20,13 +26,13 @@ export default () => {
         on: {
           slideChange: () => {
             if (storySlider.activeIndex === 0 || storySlider.activeIndex === 1) {
-              sliderContainer.style.backgroundImage = `url("img/slide1.jpg"), linear-gradient(180deg, rgba(83, 65, 118, 0) 0%, #523E75 16.85%)`;
+              storyDog.init();
             } else if (storySlider.activeIndex === 2 || storySlider.activeIndex === 3) {
-              sliderContainer.style.backgroundImage = `url("img/slide2.jpg"), linear-gradient(180deg, rgba(45, 54, 179, 0) 0%, #2A34B0 16.85%)`;
+              storyCase.init();
             } else if (storySlider.activeIndex === 4 || storySlider.activeIndex === 5) {
-              sliderContainer.style.backgroundImage = `url("img/slide3.jpg"), linear-gradient(180deg, rgba(92, 138, 198, 0) 0%, #5183C4 16.85%)`;
+              storyPyramid.init();
             } else if (storySlider.activeIndex === 6 || storySlider.activeIndex === 7) {
-              sliderContainer.style.backgroundImage = `url("img/slide4.jpg"), linear-gradient(180deg, rgba(45, 39, 63, 0) 0%, #2F2A42 16.85%)`;
+              storyAi.init();
             }
           },
           resize: () => {
@@ -56,19 +62,19 @@ export default () => {
             if (storySlider.activeIndex === 0) {
               body.classList.remove(`second`, `third`, `fourth`);
               body.classList.add(`first`);
-              sliderContainer.style.backgroundImage = `url("img/slide1.jpg")`;
+              storyDog.init();
             } else if (storySlider.activeIndex === 2) {
               body.classList.remove(`first`, `third`, `fourth`);
               body.classList.add(`second`);
-              sliderContainer.style.backgroundImage = `url("img/slide2.jpg")`;
+              storyCase.init();
             } else if (storySlider.activeIndex === 4) {
               body.classList.remove(`first`, `second`, `fourth`);
               body.classList.add(`third`);
-              sliderContainer.style.backgroundImage = `url("img/slide3.jpg")`;
+              storyPyramid.init();
             } else if (storySlider.activeIndex === 6) {
               body.classList.add(`fourth`);
               body.classList.remove(`first`, `third`, `second`);
-              sliderContainer.style.backgroundImage = `url("img/slide4.jpg")`;
+              storyAi.init();
             }
           },
           resize: () => {

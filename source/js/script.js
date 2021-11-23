@@ -10,6 +10,7 @@ import social from './modules/social.js';
 import FullPageScroll from './modules/full-page-scroll';
 import base from './modules/base';
 import AccentTypographyBuild from './modules/text-animation';
+import Intro from "./modules/three-js/into";
 
 // init modules
 mobileHeight();
@@ -21,6 +22,14 @@ result();
 form();
 social();
 base();
+
+const intro = new Intro(`canvas-homepage`, `./img/module-5/scenes-textures/scene-0.png`);
+
+document.body.addEventListener(`screenChanged`, (event) => {
+  if (event.detail.screenName === `top`) {
+    intro.init();
+  }
+});
 
 const fullPageScroll = new FullPageScroll();
 fullPageScroll.init();
