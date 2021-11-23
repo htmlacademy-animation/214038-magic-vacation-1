@@ -8,7 +8,7 @@ export default class ThreeJsCanvas {
     this.height = window.innerHeight;
     this.aspectRation = this.width / this.height;
 
-    this.texture = options.texture;
+    this.textures = options.texture;
     this.textureWidth = 2048;
     this.textureHeight = 1024;
     this.textureRatio = this.textureWidth / this.textureHeight;
@@ -39,22 +39,26 @@ export default class ThreeJsCanvas {
     this.camera = new THREE.PerspectiveCamera(45, this.aspectRation, 0.1, 1200);
     this.camera.position.z = 1200;
 
-    const loader = new THREE.TextureLoader();
-
-    loader.load(
-        self.texture,
-        function (texture) {
-          const geometry = new THREE.PlaneGeometry(1, 1);
-          const material = new THREE.MeshBasicMaterial({map: texture});
-          const mesh = new THREE.Mesh(geometry, material);
-
-          mesh.scale.x = self.textureWidth;
-          mesh.scale.y = self.textureHeight;
-
-          self.scene.add(mesh);
-          self.render();
-        }
+    const loadManager = new THREE.LoadingManager();
+    const textureLoader = new THREE.TextureLoader(loadManager);
+    const loadedTextures = this.textures.map((texture) =>
+      textureLoader.load(texture)
     );
+
+    loadManager.onLoad = () => {
+      loadedTextures.forEach((texture, positionX) => {
+        const geometry = new THREE.PlaneGeometry(1, 1);
+        const material = new THREE.MeshBasicMaterial({map: texture});
+        const image = new THREE.Mesh(geometry, material);
+
+        image.scale.x = this.textureWidth;
+        image.scale.y = this.textureHeight;
+        image.position.x = this.textureWidth * positionX;
+
+        this.scene.add(image);
+        this.render();
+      });
+    };
 
     this.render();
   }
