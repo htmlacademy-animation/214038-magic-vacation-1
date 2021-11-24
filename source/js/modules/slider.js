@@ -4,12 +4,13 @@ import Story from "./three-js/store";
 export default () => {
   let storySlider;
 
-  const storyDog = new Story(`canvas-story`, `./img/module-5/scenes-textures/scene-1.png`);
-  storyDog.init();
+  const story = new Story(`canvas-story`,
+      [`./img/module-5/scenes-textures/scene-1.png`,
+        `./img/module-5/scenes-textures/scene-2.png`,
+        `./img/module-5/scenes-textures/scene-3.png`,
+        `./img/module-5/scenes-textures/scene-4.png`]);
 
-  const storyCase = new Story(`canvas-story`, `./img/module-5/scenes-textures/scene-2.png`);
-  const storyPyramid = new Story(`canvas-story`, `./img/module-5/scenes-textures/scene-3.png`);
-  const storyAi = new Story(`canvas-story`, `./img/module-5/scenes-textures/scene-4.png`);
+  story.init();
 
   const setSlider = function () {
     const body = document.body;
@@ -26,13 +27,13 @@ export default () => {
         on: {
           slideChange: () => {
             if (storySlider.activeIndex === 0 || storySlider.activeIndex === 1) {
-              storyDog.init();
+              story.setScene(0);
             } else if (storySlider.activeIndex === 2 || storySlider.activeIndex === 3) {
-              storyCase.init();
+              story.setScene(1);
             } else if (storySlider.activeIndex === 4 || storySlider.activeIndex === 5) {
-              storyPyramid.init();
+              story.setScene(2);
             } else if (storySlider.activeIndex === 6 || storySlider.activeIndex === 7) {
-              storyAi.init();
+              story.setScene(3);
             }
           },
           resize: () => {
@@ -62,19 +63,19 @@ export default () => {
             if (storySlider.activeIndex === 0) {
               body.classList.remove(`second`, `third`, `fourth`);
               body.classList.add(`first`);
-              storyDog.init();
+              story.setScene(0);
             } else if (storySlider.activeIndex === 2) {
               body.classList.remove(`first`, `third`, `fourth`);
               body.classList.add(`second`);
-              storyCase.init();
+              story.setScene(1);
             } else if (storySlider.activeIndex === 4) {
               body.classList.remove(`first`, `second`, `fourth`);
               body.classList.add(`third`);
-              storyPyramid.init();
+              story.setScene(2);
             } else if (storySlider.activeIndex === 6) {
               body.classList.add(`fourth`);
               body.classList.remove(`first`, `third`, `second`);
-              storyAi.init();
+              story.setScene(3);
             }
           },
           resize: () => {

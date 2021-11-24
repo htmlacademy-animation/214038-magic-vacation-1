@@ -7,4 +7,9 @@ export default class Story extends ThreeJsCanvas {
       texture
     });
   }
+
+  setScene(sceneID) {
+    this.camera.position.x = this.textureWidth * sceneID;
+    this.render();
+  }
 }
