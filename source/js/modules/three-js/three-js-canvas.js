@@ -9,7 +9,6 @@ export default class ThreeJsCanvas {
     this.height = window.innerHeight;
     this.aspectRation = this.width / this.height;
 
-    this.textures = options.texture;
     this.textureWidth = 2048;
     this.textureHeight = 1024;
     this.textureRatio = this.textureWidth / this.textureHeight;
@@ -41,13 +40,13 @@ export default class ThreeJsCanvas {
     const loadManager = new THREE.LoadingManager();
     const textureLoader = new THREE.TextureLoader(loadManager);
     const loadedTextures = this.textures.map((texture) =>
-      textureLoader.load(texture)
+      ({src: textureLoader.load(texture.src), options: texture.options})
     );
 
     loadManager.onLoad = () => {
       loadedTextures.forEach((texture, positionX) => {
         const geometry = new THREE.PlaneGeometry(1, 1);
-        const material = new THREE.RawShaderMaterial(simpleRawShaderMaterial(texture));
+        const material = new THREE.RawShaderMaterial(simpleRawShaderMaterial(texture.src, texture.options));
         const mesh = new THREE.Mesh(geometry, material);
 
         mesh.scale.x = this.textureWidth;
