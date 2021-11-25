@@ -1,14 +1,10 @@
 import Swiper from "swiper";
-import Story from "./three-js/store";
+import Story from "./three-js/story";
 
 export default () => {
   let storySlider;
 
-  const story = new Story(`canvas-story`,
-      [`./img/module-5/scenes-textures/scene-1.png`,
-        `./img/module-5/scenes-textures/scene-2.png`,
-        `./img/module-5/scenes-textures/scene-3.png`,
-        `./img/module-5/scenes-textures/scene-4.png`]);
+  const story = new Story(`canvas-story`);
 
   story.init();
 

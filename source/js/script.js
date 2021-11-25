@@ -23,7 +23,7 @@ form();
 social();
 base();
 
-const intro = new Intro(`canvas-homepage`, [`./img/module-5/scenes-textures/scene-0.png`]);
+const intro = new Intro(`canvas-homepage`);
 
 document.body.addEventListener(`screenChanged`, (event) => {
   if (event.detail.screenName === `top`) {
