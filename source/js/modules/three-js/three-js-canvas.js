@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import simpleRawShaderMaterial from './simple-raw-shader-material';
+import {simpleRawShaderMaterial} from './simple-raw-shader-material';
 
 export default class ThreeJsCanvas {
   constructor(
@@ -17,6 +17,8 @@ export default class ThreeJsCanvas {
   }
 
   init() {
+    const self = this;
+
     this.canvas = document.getElementById(this.canvasId);
     this.canvas.width = this.width;
     this.canvas.height = this.height;
@@ -44,14 +46,14 @@ export default class ThreeJsCanvas {
     );
 
     loadManager.onLoad = () => {
-      loadedTextures.forEach((texture, positionX) => {
+      loadedTextures.forEach((texture, index) => {
         const geometry = new THREE.PlaneGeometry(1, 1);
-        const material = new THREE.RawShaderMaterial(simpleRawShaderMaterial(texture.src, texture.options));
+        const material = self.createMaterial(texture, index);
         const mesh = new THREE.Mesh(geometry, material);
 
         mesh.scale.x = this.textureWidth;
         mesh.scale.y = this.textureHeight;
-        mesh.position.x = this.textureWidth * positionX;
+        mesh.position.x = this.textureWidth * index;
 
         this.scene.add(mesh);
         this.render();
@@ -59,6 +61,10 @@ export default class ThreeJsCanvas {
     };
 
     this.render();
+  }
+
+  createMaterial(texture) {
+    return new THREE.RawShaderMaterial(simpleRawShaderMaterial(texture.src, texture.options));
   }
 
   render() {
