@@ -17,18 +17,31 @@ export default class Story extends ThreeJsCanvas {
       {src: `./img/module-5/scenes-textures/scene-4.png`, options: {hue: 0.0}}
     ];
 
+    this.bubbleGlareOffset = 0.8;
+    this.bubbleGlareStartRadianAngle = 2;
+    this.bubbleGlareEndRadianAngle = 3;
+
     this.bubbles = [
       {
         radius: 80.0,
         position: [this.center.x - 50, 450],
+        glareOffset: this.bubbleGlareOffset,
+        glareAngleStart: this.bubbleGlareStartRadianAngle,
+        glareAngleEnd: this.bubbleGlareEndRadianAngle
       },
       {
         radius: 40.0,
         position: [this.center.x + 100, 300],
+        glareOffset: this.bubbleGlareOffset,
+        glareAngleStart: this.bubbleGlareStartRadianAngle,
+        glareAngleEnd: this.bubbleGlareEndRadianAngle
       },
       {
         radius: 60.0,
         position: [this.center.x - 400, 150],
+        glareOffset: this.bubbleGlareOffset,
+        glareAngleStart: this.bubbleGlareStartRadianAngle,
+        glareAngleEnd: this.bubbleGlareEndRadianAngle
       },
     ];
   }

@@ -92,6 +92,9 @@ export const storyRowShaderMaterial = (uniforms) => ({
     struct bubbleStruct {
       float radius;
       vec2 position;
+      float glareOffset;
+      float glareAngleStart;
+      float glareAngleEnd;
     };
 
     struct magnificationStruct {
@@ -135,6 +138,18 @@ export const storyRowShaderMaterial = (uniforms) => ({
       return floor(offset) >= floor(radius) && floor(offset) <= floor(radius + outlineThickness);
     }
 
+    // определение позиции точки между началом и концом линии блика
+    bool isBetweenAngles(vec2 point, float glareAngleStart, float glareAngleEnd) {
+      float angle = atan(point.y, point.x);
+
+      return angle >= glareAngleStart && angle <= glareAngleEnd;
+    }
+
+    // является ли точка частью блика
+    bool isGlarePart(vec2 point, vec2 circle, float radius, float glareWidth, float glareAngleStart, float glareAngleEnd) {
+      return isOutlineOfTheCircle(point, circle, radius, glareWidth) && isBetweenAngles(point - circle, glareAngleStart, glareAngleEnd);
+    }
+
     // задаем цвет контуру
     vec4 blendOutline(vec4 texture, vec4 outline) {
       return vec4(mix(texture.rgb, outline.rgb, outline.a), texture.a);
@@ -145,7 +160,7 @@ export const storyRowShaderMaterial = (uniforms) => ({
       float outlineThickness = 3.0;
 
       // цвет обводки контура
-      vec4 outlineColor = vec4(1, 1, 1, 0.1);
+      vec4 outlineColor = vec4(1, 1, 1, 0.15);
 
        // позиция центра пузыря
       vec2 resolution = magnification.resolution;
@@ -173,13 +188,20 @@ export const storyRowShaderMaterial = (uniforms) => ({
       float hr = radius * sqrt(1.0 - pow((radius - h) / radius, 2.0));
       float offset = sqrt(pow(point.x - position.x, 2.0) + pow(point.y - position.y, 2.0));
 
+      float glareAngleStart = bubble.glareAngleStart;
+      float glareAngleEnd = bubble.glareAngleEnd;
+      float glareOffset = bubble.glareOffset;
+
       bool pointIsInside = isInsideTheCircle(point, position, hr);
       bool pointIsOutline = isOutlineOfTheCircle(point, position, hr, outlineThickness);
+
+      // является ли точка бликом
+      bool isGlarePoint = isGlarePart(point, position, hr * glareOffset, outlineThickness, glareAngleStart, glareAngleEnd);
 
       vec2 newPoint = pointIsInside ? (point - position) * (radius - h) / sqrt(pow(radius, 2.0) - pow(offset, 2.0)) + position : point;
       vec2 newVUv = newPoint / resolution;
 
-      if (pointIsOutline) {
+      if (pointIsOutline || isGlarePoint) {
         return blendOutline(texture2D(map, newVUv), outlineColor);
       }
 
