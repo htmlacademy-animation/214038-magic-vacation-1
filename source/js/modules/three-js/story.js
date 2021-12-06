@@ -18,8 +18,7 @@ export default class Story extends ThreeJsCanvas {
 
     this.center = {x: this.width / 2, y: this.height / 2};
     this.isActiveTwoScreen = false;
-    this.hueIteration = 0;
-    this.countIteration = 0;
+    this.isNeedToRepeatCycleHue = true;
 
     this.textures = [
       {src: `./img/module-5/scenes-textures/scene-1.png`, options: {hue: 0.0}},
@@ -99,8 +98,7 @@ export default class Story extends ThreeJsCanvas {
       this.animateHueShift();
     } else {
       this.isActiveTwoScreen = false;
-      this.countIteration = 0;
-      this.hueIteration = 0;
+      this.isNeedToRepeatCycleHue = true;
       this.resetHueShift();
       animationHueSettings.currentHue = 0;
     }
@@ -108,7 +106,7 @@ export default class Story extends ThreeJsCanvas {
 
   // обнуляем параметры для запуска нового цикла мигания
   resetHueCycle() {
-    animationHueSettings.duration = this.getRandomNumber(0.5, 1); // рандомная длительность одного мигания
+    animationHueSettings.duration = this.getRandomNumber(1.5, 2); // рандомная длительность одного мигания
     animationHueSettings.timeStart = Date.now() * 0.001; // обнуляем время отсчета
   }
 
@@ -120,9 +118,9 @@ export default class Story extends ThreeJsCanvas {
   animateHueShift() {
     this.animate();
 
-    // запускам эффект hue второй и третий раз
-    if ((this.hueIteration === 1 || this.hueIteration === 2) && this.countIteration === 0) {
-      this.countIteration = 1;
+    // обнуляем цикл мигания для последующего запуска снова
+    if (this.isNeedToRepeatCycleHue) {
+      this.isNeedToRepeatCycleHue = false;
       animationHueSettings.currentHue = 0;
 
       this.resetHueCycle();
@@ -151,8 +149,7 @@ export default class Story extends ThreeJsCanvas {
       // время превышено для данного цикла анимации
       if (t >= animationHueSettings.duration) {
         animationHueSettings.timeStart = -1;
-        this.hueIteration++;
-        this.countIteration = 0;
+        this.isNeedToRepeatCycleHue = true;
       }
 
       const progress = t / animationHueSettings.duration;
