@@ -18,8 +18,7 @@ export default class Story extends ThreeJsCanvas {
 
     this.center = {x: this.width / 2, y: this.height / 2};
     this.isActiveTwoScreen = false;
-    this.hueIteration = 0;
-    this.countIteration = 0;
+    this.isNeedToRepeatCycleHue = true;
 
     this.textures = [
       {src: `./img/module-5/scenes-textures/scene-1.png`, options: {hue: 0.0}},
@@ -31,28 +30,41 @@ export default class Story extends ThreeJsCanvas {
     this.bubbleGlareOffset = 0.8;
     this.bubbleGlareStartRadianAngle = 2;
     this.bubbleGlareEndRadianAngle = 3;
+    this.bubblesDuration = 4;
 
     this.bubbles = [
       {
         radius: 80.0,
-        position: [this.center.x - 50, 450],
+        initialPosition: [this.center.x - 100, 0],
+        position: [],
+        finalPosition: [this.center.x - 100, this.center.y + this.height],
+        amplitude: 80,
         glareOffset: this.bubbleGlareOffset,
         glareAngleStart: this.bubbleGlareStartRadianAngle,
-        glareAngleEnd: this.bubbleGlareEndRadianAngle
+        glareAngleEnd: this.bubbleGlareEndRadianAngle,
+        timeStart: -1
       },
       {
         radius: 40.0,
-        position: [this.center.x + 100, 300],
+        initialPosition: [this.center.x + 100, this.center.y - this.height * 1.4],
+        position: [],
+        finalPosition: [this.center.x + 100, this.center.y + this.height],
+        amplitude: 60,
         glareOffset: this.bubbleGlareOffset,
         glareAngleStart: this.bubbleGlareStartRadianAngle,
-        glareAngleEnd: this.bubbleGlareEndRadianAngle
+        glareAngleEnd: this.bubbleGlareEndRadianAngle,
+        timeStart: -1
       },
       {
         radius: 60.0,
-        position: [this.center.x - 400, 150],
+        initialPosition: [this.center.x - 350, this.center.y - this.height * 2],
+        position: [],
+        finalPosition: [this.center.x - 350, this.center.y + this.height],
+        amplitude: -100,
         glareOffset: this.bubbleGlareOffset,
         glareAngleStart: this.bubbleGlareStartRadianAngle,
-        glareAngleEnd: this.bubbleGlareEndRadianAngle
+        glareAngleEnd: this.bubbleGlareEndRadianAngle,
+        timeStart: -1
       },
     ];
   }
@@ -93,14 +105,14 @@ export default class Story extends ThreeJsCanvas {
 
   actionSlideTwo(sceneID) {
     this.resetHueCycle();
+    this.resetBubbleCycle();
 
     if (sceneID === 1) {
       this.isActiveTwoScreen = true;
-      this.animateHueShift();
+      this.startAnimate();
     } else {
       this.isActiveTwoScreen = false;
-      this.countIteration = 0;
-      this.hueIteration = 0;
+      this.isNeedToRepeatCycleHue = true;
       this.resetHueShift();
       animationHueSettings.currentHue = 0;
     }
@@ -108,8 +120,14 @@ export default class Story extends ThreeJsCanvas {
 
   // обнуляем параметры для запуска нового цикла мигания
   resetHueCycle() {
-    animationHueSettings.duration = this.getRandomNumber(0.5, 1); // рандомная длительность одного мигания
+    animationHueSettings.duration = this.getRandomNumber(1.5, 2); // рандомная длительность одного мигания
     animationHueSettings.timeStart = Date.now() * 0.001; // обнуляем время отсчета
+  }
+
+  resetBubbleCycle() {
+    this.bubbles.forEach((bubble) => {
+      bubble.timeStart = Date.now() * 0.001;
+    });
   }
 
   // обнуляем hue
@@ -117,12 +135,17 @@ export default class Story extends ThreeJsCanvas {
     this.textures[1].options.hue = animationHueSettings.initialHue;
   }
 
-  animateHueShift() {
-    this.animate();
+  startAnimate() {
+    this.animateHueShift();
 
-    // запускам эффект hue второй и третий раз
-    if ((this.hueIteration === 1 || this.hueIteration === 2) && this.countIteration === 0) {
-      this.countIteration = 1;
+    // запуск анимации для всех пузырьков
+    this.bubbles.forEach((bubble) => {
+      this.animateBubbles(bubble);
+    });
+
+    // обнуляем цикл мигания для последующего запуска снова
+    if (this.isNeedToRepeatCycleHue) {
+      this.isNeedToRepeatCycleHue = false;
       animationHueSettings.currentHue = 0;
 
       this.resetHueCycle();
@@ -131,18 +154,18 @@ export default class Story extends ThreeJsCanvas {
     // если активен второй слайдер, то гоняем действует requestAnimationFrame, если нет - отменяет его
     if (this.isActiveTwoScreen) {
       requestAnimationFrame(() => {
-        this.animateHueShift();
+        this.startAnimate();
         this.render();
       });
     } else {
       cancelAnimationFrame(() => {
-        this.animateHueShift();
+        this.startAnimate();
         this.render();
       });
     }
   }
 
-  animate() {
+  animateHueShift() {
     let hueValue = animationHueSettings.currentHue;
 
     if (animationHueSettings.timeStart > 0) {
@@ -151,8 +174,7 @@ export default class Story extends ThreeJsCanvas {
       // время превышено для данного цикла анимации
       if (t >= animationHueSettings.duration) {
         animationHueSettings.timeStart = -1;
-        this.hueIteration++;
-        this.countIteration = 0;
+        this.isNeedToRepeatCycleHue = true;
       }
 
       const progress = t / animationHueSettings.duration;
@@ -165,9 +187,22 @@ export default class Story extends ThreeJsCanvas {
     }
 
     // обновляем значение hue для последующей передачи в шейдер
-    if (hueValue !== animationHueSettings.currentHue && this.isActiveTwoScreen) {
+    if (hueValue !== animationHueSettings.currentHue) {
       this.textures[1].options.hue = hueValue;
       animationHueSettings.currentHue = hueValue;
+    }
+  }
+
+  animateBubbles(bubble) {
+    if (bubble.timeStart > 0) {
+      const t = Date.now() * 0.001 - bubble.timeStart;
+      const progress = t / this.bubblesDuration;
+
+      const y = bubble.initialPosition[1] + progress * (bubble.finalPosition[1] - bubble.initialPosition[1]);
+      const offset = bubble.amplitude * Math.pow(1 - progress, 1) * Math.sin(progress * Math.PI * 10);
+      const x = (offset + bubble.initialPosition[0]);
+
+      bubble.position = [x, y];
     }
   }
 
