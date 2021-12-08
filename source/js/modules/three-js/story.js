@@ -150,12 +150,12 @@ export default class Story extends ThreeJsCanvas {
     light.add(lightUnit);
 
     // Light 2
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.60, 975, 2);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(0,245,41)`), 0.60, 0, 2);
     lightUnit.position.set(-785, -350, 710);
     light.add(lightUnit);
 
     // Light 3
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.95, 975, 2);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(31,195,240)`), 0.95, 0, 2);
     lightUnit.position.set(730, -800, 985);
     light.add(lightUnit);
 
