@@ -69,6 +69,99 @@ export default class Story extends ThreeJsCanvas {
     ];
   }
 
+  init() {
+    const self = this;
+
+    this.canvas = document.getElementById(this.canvasId);
+    this.canvas.width = this.width;
+    this.canvas.height = this.height;
+
+    this.color = new THREE.Color(0x5f458c);
+    this.alpha = 1;
+
+    this.scene = new THREE.Scene();
+
+    this.renderer = new THREE.WebGLRenderer({
+      canvas: this.canvas,
+      alpha: true,
+      antialias: false,
+      logarithmicDepthBuffer: false,
+      powerPreference: `high-performance`
+    });
+
+    this.renderer.setClearColor(this.color, this.alpha);
+    this.renderer.setPixelRatio(window.devicePixelRatio);
+    this.renderer.setSize(this.width, this.height);
+
+    this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 1200);
+    this.camera.position.z = 750;
+
+    const loadManager = new THREE.LoadingManager();
+    const textureLoader = new THREE.TextureLoader(loadManager);
+    const loadedTextures = this.textures.map((texture) =>
+      ({src: textureLoader.load(texture.src), options: texture.options})
+    );
+
+    loadManager.onLoad = () => {
+      loadedTextures.forEach((texture, index) => {
+        const geometry = new THREE.PlaneGeometry(1, 1);
+        const material = self.createMaterial(texture, index);
+        const mesh = new THREE.Mesh(geometry, material);
+
+        mesh.scale.x = this.textureWidth;
+        mesh.scale.y = this.textureHeight;
+        mesh.position.x = this.textureWidth * index;
+
+        this.scene.add(mesh);
+        this.scene.add(this.getSphere());
+
+        const lights = this.getLight();
+
+        lights.position.z = this.camera.position.z;
+        this.scene.add(lights);
+
+        this.render();
+      });
+    };
+
+    this.render();
+  }
+
+  getSphere() {
+    const geometry = new THREE.SphereGeometry(100, 50, 50);
+
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xa40c00,
+      metalness: 0.05,
+      emissive: 0x0,
+      roughness: 0.5
+    });
+
+    return new THREE.Mesh(geometry, material);
+  }
+
+  getLight() {
+    const light = new THREE.Group();
+
+    // Light 1
+    let lightUnit = new THREE.PointLight(new THREE.Color(`rgb(255,255,255)`), 0.84);
+
+    lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
+    light.add(lightUnit);
+
+    // Light 2
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.60, 975, 2);
+    lightUnit.position.set(-785, -350, 710);
+    light.add(lightUnit);
+
+    // Light 3
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.95, 975, 2);
+    lightUnit.position.set(730, -800, 985);
+    light.add(lightUnit);
+
+    return light;
+  }
+
   addBubble(index) {
     const width = this.renderer.getSize().width;
     const pixelRatio = this.renderer.getPixelRatio();
