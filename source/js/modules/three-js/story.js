@@ -1,6 +1,8 @@
 import ThreeJsCanvas from "./three-js-canvas";
 import * as THREE from "three";
 import {storyRowShaderMaterial} from "./simple-raw-shader-material";
+import Scene2Slide from "./scenes/slide-2";
+import Scene3Slide from "./scenes/slide-3";
 
 let animationHueSettings = {
   initialHue: 0,
@@ -8,6 +10,15 @@ let animationHueSettings = {
   currentHue: 0,
   duration: 1,
   timeStart: -1
+};
+
+export const setMaterial = (options = {}) => {
+  const {color, ...other} = options;
+
+  return new THREE.MeshStandardMaterial({
+    color: new THREE.Color(color),
+    ...other
+  });
 };
 
 export default class Story extends ThreeJsCanvas {
@@ -22,8 +33,8 @@ export default class Story extends ThreeJsCanvas {
 
     this.textures = [
       {src: `./img/module-5/scenes-textures/scene-1.png`, options: {hue: 0.0}},
-      {src: `./img/module-5/scenes-textures/scene-2.png`, options: {hue: 0.0, isMagnifier: true}},
-      {src: `./img/module-5/scenes-textures/scene-3.png`, options: {hue: 0.0}},
+      {src: `./img/module-5/scenes-textures/scene-2.png`, options: {hue: 0.0, isMagnifier: true}, scene: new Scene2Slide()},
+      {src: `./img/module-5/scenes-textures/scene-3.png`, options: {hue: 0.0}, scene: new Scene3Slide()},
       {src: `./img/module-5/scenes-textures/scene-4.png`, options: {hue: 0.0}}
     ];
 
@@ -99,7 +110,7 @@ export default class Story extends ThreeJsCanvas {
     const loadManager = new THREE.LoadingManager();
     const textureLoader = new THREE.TextureLoader(loadManager);
     const loadedTextures = this.textures.map((texture) =>
-      ({src: textureLoader.load(texture.src), options: texture.options})
+      ({src: textureLoader.load(texture.src), options: texture.options, scene: texture.scene})
     );
 
     loadManager.onLoad = () => {
@@ -111,6 +122,11 @@ export default class Story extends ThreeJsCanvas {
         mesh.scale.x = this.textureWidth;
         mesh.scale.y = this.textureHeight;
         mesh.position.x = this.textureWidth * index;
+
+        if (texture.scene) {
+          texture.scene.position.x = this.textureWidth * index;
+          this.scene.add(texture.scene);
+        }
 
         this.scene.add(mesh);
         this.scene.add(this.getSphere());
@@ -143,19 +159,16 @@ export default class Story extends ThreeJsCanvas {
   getLight() {
     const light = new THREE.Group();
 
-    // Light 1
-    let lightUnit = new THREE.PointLight(new THREE.Color(`rgb(255,255,255)`), 0.84);
+    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.30);
 
     lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
     light.add(lightUnit);
 
-    // Light 2
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(0,245,41)`), 0.60, 0, 2);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.60, 3000, 2);
     lightUnit.position.set(-785, -350, 710);
     light.add(lightUnit);
 
-    // Light 3
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(31,195,240)`), 0.95, 0, 2);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.95, 3000, 2);
     lightUnit.position.set(730, -800, 985);
     light.add(lightUnit);
 
