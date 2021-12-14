@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import {setMaterial} from "../story";
 import Snowman from "./objects/snowman";
+import Road from "./objects/road";
 
 class Scene3Slide extends THREE.Group {
   constructor() {
@@ -11,6 +12,7 @@ class Scene3Slide extends THREE.Group {
 
   constructChildren() {
     this.addSnowMan();
+    this.addRoad();
   }
 
   addSnowMan() {
@@ -20,6 +22,17 @@ class Scene3Slide extends THREE.Group {
     snowMan.position.set(-130, -20, 0);
 
     this.add(snowMan);
+  }
+
+  addRoad() {
+    const road = new Road();
+    const scale = 0.735;
+
+    road.scale.set(scale, scale, scale);
+    road.position.set(0, -100, 0);
+    road.rotation.copy(new THREE.Euler(13.5 * THREE.Math.DEG2RAD, -45 * THREE.Math.DEG2RAD, 0), `XYZ`);
+
+    this.add(road);
   }
 }
 

@@ -105,8 +105,8 @@ export default class Story extends ThreeJsCanvas {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.width, this.height);
 
-    this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 1200);
-    this.camera.position.z = 750;
+    this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 1500);
+    this.camera.position.z = 1500;
 
     const loadManager = new THREE.LoadingManager();
     const textureLoader = new THREE.TextureLoader(loadManager);
@@ -165,13 +165,13 @@ export default class Story extends ThreeJsCanvas {
     lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
     light.add(lightUnit);
 
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.60, 3000, 2);
-    lightUnit.position.set(-785, -350, 710);
-    light.add(lightUnit);
-
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.95, 3000, 2);
-    lightUnit.position.set(730, -800, 985);
-    light.add(lightUnit);
+    // lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.60, 3000, 2);
+    // lightUnit.position.set(-785, -350, 710);
+    // light.add(lightUnit);
+    //
+    // lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.95, 3000, 2);
+    // lightUnit.position.set(730, -800, 985);
+    // light.add(lightUnit);
 
     return light;
   }
