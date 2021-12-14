@@ -105,8 +105,8 @@ export default class Story extends ThreeJsCanvas {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.width, this.height);
 
-    this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 1200);
-    this.camera.position.z = 750;
+    this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 1500);
+    this.camera.position.z = 1500;
 
     const loadManager = new THREE.LoadingManager();
     const textureLoader = new THREE.TextureLoader(loadManager);
