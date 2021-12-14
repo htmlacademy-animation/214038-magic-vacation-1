@@ -1,6 +1,7 @@
 import ThreeJsCanvas from "./three-js-canvas";
 import * as THREE from "three";
 import {storyRowShaderMaterial} from "./simple-raw-shader-material";
+import Scene1Slide from "./scenes/slide-1";
 import Scene2Slide from "./scenes/slide-2";
 import Scene3Slide from "./scenes/slide-3";
 
@@ -32,7 +33,7 @@ export default class Story extends ThreeJsCanvas {
     this.isNeedToRepeatCycleHue = true;
 
     this.textures = [
-      {src: `./img/module-5/scenes-textures/scene-1.png`, options: {hue: 0.0}},
+      {src: `./img/module-5/scenes-textures/scene-1.png`, options: {hue: 0.0}, scene: new Scene1Slide()},
       {src: `./img/module-5/scenes-textures/scene-2.png`, options: {hue: 0.0, isMagnifier: true}, scene: new Scene2Slide()},
       {src: `./img/module-5/scenes-textures/scene-3.png`, options: {hue: 0.0}, scene: new Scene3Slide()},
       {src: `./img/module-5/scenes-textures/scene-4.png`, options: {hue: 0.0}}
@@ -129,7 +130,7 @@ export default class Story extends ThreeJsCanvas {
         }
 
         this.scene.add(mesh);
-        this.scene.add(this.getSphere());
+        // this.scene.add(this.getSphere());
 
         const lights = this.getLight();
 
