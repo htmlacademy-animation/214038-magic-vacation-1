@@ -1,45 +1,55 @@
+import {colors} from "../scenes/helpers/colors";
+import {reflectivity} from "../scenes/helpers/reflectivity";
+
 const svgConfig = {
   keyHole: {
     src: `./img/module-6/svg-forms/keyhole.svg`,
-    color: `#4e4069`,
+    color: colors.DarkPurple,
     depth: 20,
-    cap: 0
+    cap: 0,
+    reflectivity: reflectivity.soft
   },
   leaf: {
     src: `./img/module-6/svg-forms/leaf.svg`,
-    color: `#34df96`,
+    color: colors.Green,
     depth: 8,
-    cap: 2
+    cap: 2,
+    reflectivity: reflectivity.basic
   },
   leafPyramid: {
     src: `./img/module-6/svg-forms/leaf.svg`,
-    color: `#20c14f`,
+    color: colors.Green,
     depth: 3,
-    cap: 3
+    cap: 3,
+    reflectivity: reflectivity.basic
   },
   flamingo: {
     src: `./img/module-6/svg-forms/flamingo.svg`,
-    color: `#fe6183`,
+    color: colors.LightDominantRed,
     depth: 8,
-    cap: 2
+    cap: 2,
+    reflectivity: reflectivity.soft
   },
   question: {
     src: `./img/module-6/svg-forms/question.svg`,
-    color: `#3b7bf2`,
+    color: colors.Blue,
     depth: 8,
-    cap: 2
+    cap: 2,
+    reflectivity: reflectivity.basic
   },
   snowflake: {
     src: `./img/module-6/svg-forms/snowflake.svg`,
-    color: `#3b7bf2`,
+    color: colors.Blue,
     depth: 8,
-    cap: 2
+    cap: 2,
+    reflectivity: reflectivity.basic
   },
   flower: {
     src: `./img/module-6/svg-forms/flower.svg`,
-    color: `#664ba5`,
+    color: colors.ShadowedPurple,
     depth: 4,
-    cap: 2
+    cap: 2,
+    reflectivity: reflectivity.basic
   }
 };
 

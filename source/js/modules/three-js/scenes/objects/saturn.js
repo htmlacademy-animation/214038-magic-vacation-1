@@ -1,14 +1,16 @@
 import * as THREE from 'three';
 import {setMaterial} from "../../story";
 import {getLathePoints} from '../utils/lathe-options';
+import {colors} from "../helpers/colors";
+import {reflectivity} from "../helpers/reflectivity";
 
 export default class Saturn extends THREE.Group {
-  constructor() {
+  constructor(slide) {
     super();
 
-    this.colorSaturn = 0xfc2947;
-    this.colorRing = 0x5b3ea5;
-    this.colorRope = 0x8388ab;
+    this.colorSaturn = slide === `slide1` ? colors.DominantRed : colors.ShadowedDominantRed;
+    this.colorRing = slide === `slide1` ? colors.BrightPurple : colors.ShadowedBrightPurple; ;
+    this.colorRope = colors.MetalGrey;
 
     this.constructChildren();
   }
@@ -16,14 +18,14 @@ export default class Saturn extends THREE.Group {
   constructChildren() {
     this.addSphereBig();
     this.addRing();
-    this.addCylinder();
+    this.addRope();
     this.addSphereSmall();
   }
 
   addSphereBig() {
     const sphere = new THREE.SphereGeometry(60, 50, 50);
 
-    this.sphereBigMesh = new THREE.Mesh(sphere, setMaterial({color: this.colorSaturn, flatShading: true}));
+    this.sphereBigMesh = new THREE.Mesh(sphere, setMaterial({color: this.colorSaturn, flatShading: true, ...reflectivity.soft}));
 
     this.add(this.sphereBigMesh);
   }
@@ -31,18 +33,18 @@ export default class Saturn extends THREE.Group {
   addRing() {
     const points = getLathePoints(40, 2, 80);
     const ring = new THREE.LatheBufferGeometry(points, 50);
-    const ringMesh = new THREE.Mesh(ring, setMaterial({color: this.colorRing, flatShading: true, side: THREE.DoubleSide}));
+    const ringMesh = new THREE.Mesh(ring, setMaterial({color: this.colorRing, flatShading: true, side: THREE.DoubleSide, ...reflectivity.soft}));
 
     ringMesh.rotation.copy(new THREE.Euler(20 * THREE.Math.DEG2RAD, 0, 18 * THREE.Math.DEG2RAD), `XYZ`);
 
     this.add(ringMesh);
   }
 
-  addCylinder() {
+  addRope() {
     const cylinder = new THREE.CylinderBufferGeometry(1, 1, 1000, 10);
     const topOffset = this.sphereBigMesh.position.y + cylinder.parameters.height / 2;
 
-    this.cylinderMesh = new THREE.Mesh(cylinder, setMaterial({color: this.colorRope, flatShading: true}));
+    this.cylinderMesh = new THREE.Mesh(cylinder, setMaterial({color: this.colorRope, flatShading: true, ...reflectivity.soft}));
     this.cylinderMesh.position.set(0, topOffset, 0);
 
     this.add(this.cylinderMesh);
@@ -51,7 +53,7 @@ export default class Saturn extends THREE.Group {
   addSphereSmall() {
     const sphere = new THREE.SphereGeometry(10, 30, 30);
     const topOffset = this.sphereBigMesh.position.y + this.sphereBigMesh.geometry.parameters.radius * 2;
-    const sphereSmallMesh = new THREE.Mesh(sphere, setMaterial({color: this.colorRing, flatShading: true}));
+    const sphereSmallMesh = new THREE.Mesh(sphere, setMaterial({color: this.colorRing, flatShading: true, ...reflectivity.soft}));
 
     sphereSmallMesh.position.set(this.cylinderMesh.position.x, topOffset, this.cylinderMesh.position.z);
 

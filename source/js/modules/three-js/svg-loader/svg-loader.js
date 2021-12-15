@@ -21,8 +21,9 @@ export default class SvgLoader {
 
           for (let i = 0; i < paths.length; i++) {
             const path = paths[i];
-            const material = new THREE.MeshBasicMaterial({
+            const material = new THREE.MeshStandardMaterial({
               color: new THREE.Color(svgConfig[self.name].color),
+              ...svgConfig[self.name].reflectivity
             });
 
             const shapes = path.toShapes(false);
