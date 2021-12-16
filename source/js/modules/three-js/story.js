@@ -1,6 +1,6 @@
 import ThreeJsCanvas from "./three-js-canvas";
 import * as THREE from "three";
-import {storyRowShaderMaterial} from "./simple-raw-shader-material";
+import {storyRowShaderMaterial} from "./materials/simple-raw-shader-material";
 import Scene1Slide from "./scenes/slide-1";
 import Scene2Slide from "./scenes/slide-2";
 import Scene3Slide from "./scenes/slide-3";

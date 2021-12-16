@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {simpleRawShaderMaterial} from './simple-raw-shader-material';
+import {simpleRawShaderMaterial} from "./materials/simple-raw-shader-material";
 
 export default class ThreeJsCanvas {
   constructor(
