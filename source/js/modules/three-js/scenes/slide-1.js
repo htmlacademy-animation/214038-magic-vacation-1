@@ -39,7 +39,7 @@ export default class Scene1Slide extends THREE.Group {
   }
 
   addSaturn() {
-    const saturn = new Saturn();
+    const saturn = new Saturn(`slide1`);
 
     saturn.position.set(60, 240, 100);
 

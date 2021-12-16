@@ -2,6 +2,8 @@ import ThreeJsCanvas from "./three-js-canvas";
 import * as THREE from "three";
 import SvgLoader from "./svg-loader/svg-loader";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {colors} from "./scenes/helpers/colors";
+import {reflectivity} from "./scenes/helpers/reflectivity";
 
 export default class Intro extends ThreeJsCanvas {
   constructor(canvasId) {
@@ -12,6 +14,15 @@ export default class Intro extends ThreeJsCanvas {
     this.textures = [{src: `./img/module-5/scenes-textures/scene-0.png`, options: {hue: 0.0}}];
     this.render = this.render.bind(this);
     this.firstLoaded = true;
+  }
+
+  setMaterial(options = {}) {
+    const {color, ...other} = options;
+
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color(color),
+      ...other
+    });
   }
 
   init() {
@@ -65,6 +76,10 @@ export default class Intro extends ThreeJsCanvas {
         mesh.scale.y = this.textureHeight;
         mesh.position.x = this.textureWidth * index;
 
+        const lights = this.setLights();
+        lights.position.z = this.camera.position.z;
+        this.scene.add(lights);
+
         this.scene.add(mesh);
         this.render();
       });
@@ -73,12 +88,40 @@ export default class Intro extends ThreeJsCanvas {
     this.render();
   }
 
+  setLights() {
+    const light = new THREE.Group();
+
+    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.80);
+
+    lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
+    light.add(lightUnit);
+
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.30, 3000, 1);
+    lightUnit.position.set(0, -350, 710);
+    light.add(lightUnit);
+
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.55, 3000, 1);
+    lightUnit.position.set(730, -800, 985);
+    light.add(lightUnit);
+
+    return light;
+  }
+
   loadSvg() {
+    this.addBord();
     this.getKeyHole();
     this.getLeaf();
     this.getFlamingo();
     this.getQuestion();
     this.getSnowFlake();
+  }
+
+  addBord() {
+    const plane = new THREE.PlaneGeometry(500, 500);
+    const planeMesh = new THREE.Mesh(plane, this.setMaterial({color: colors.Purple, ...reflectivity.basic, flatShading: true}));
+
+    planeMesh.position.set(0, 0, 5);
+    this.scene.add(planeMesh);
   }
 
   getKeyHole() {

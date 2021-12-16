@@ -17,7 +17,7 @@ export default class Rug extends THREE.Group {
 
   constructChildren() {
     this.addBase();
-    this.addStrips();
+    // this.addStrips();
   }
 
   addBase() {

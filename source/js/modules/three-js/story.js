@@ -4,6 +4,7 @@ import {storyRowShaderMaterial} from "./simple-raw-shader-material";
 import Scene1Slide from "./scenes/slide-1";
 import Scene2Slide from "./scenes/slide-2";
 import Scene3Slide from "./scenes/slide-3";
+import Scene4Slide from "./scenes/slide-4";
 
 let animationHueSettings = {
   initialHue: 0,
@@ -36,7 +37,7 @@ export default class Story extends ThreeJsCanvas {
       {src: `./img/module-5/scenes-textures/scene-1.png`, options: {hue: 0.0}, scene: new Scene1Slide()},
       {src: `./img/module-5/scenes-textures/scene-2.png`, options: {hue: 0.0, isMagnifier: true}, scene: new Scene2Slide()},
       {src: `./img/module-5/scenes-textures/scene-3.png`, options: {hue: 0.0}, scene: new Scene3Slide()},
-      {src: `./img/module-5/scenes-textures/scene-4.png`, options: {hue: 0.0}}
+      {src: `./img/module-5/scenes-textures/scene-4.png`, options: {hue: 0.0}, scene: new Scene4Slide()}
     ];
 
     this.bubbleGlareOffset = 0.8;
@@ -130,7 +131,6 @@ export default class Story extends ThreeJsCanvas {
         }
 
         this.scene.add(mesh);
-        // this.scene.add(this.getSphere());
 
         const lights = this.getLight();
 
@@ -144,19 +144,6 @@ export default class Story extends ThreeJsCanvas {
     this.render();
   }
 
-  getSphere() {
-    const geometry = new THREE.SphereGeometry(100, 50, 50);
-
-    const material = new THREE.MeshStandardMaterial({
-      color: 0xa40c00,
-      metalness: 0.05,
-      emissive: 0x0,
-      roughness: 0.5
-    });
-
-    return new THREE.Mesh(geometry, material);
-  }
-
   getLight() {
     const light = new THREE.Group();
 
@@ -165,13 +152,13 @@ export default class Story extends ThreeJsCanvas {
     lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
     light.add(lightUnit);
 
-    // lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.60, 3000, 2);
-    // lightUnit.position.set(-785, -350, 710);
-    // light.add(lightUnit);
-    //
-    // lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.95, 3000, 2);
-    // lightUnit.position.set(730, -800, 985);
-    // light.add(lightUnit);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.60, 3000, 1);
+    lightUnit.position.set(-785, -350, 710);
+    light.add(lightUnit);
+
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.95, 3000, 1);
+    lightUnit.position.set(730, -800, 985);
+    light.add(lightUnit);
 
     return light;
   }
