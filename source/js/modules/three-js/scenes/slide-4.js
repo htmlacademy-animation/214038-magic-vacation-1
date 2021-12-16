@@ -23,7 +23,7 @@ export default class Scene4Slide extends THREE.Group {
   }
 
   addRug() {
-    const rug = new Rug();
+    const rug = new Rug(`slide4`);
     const scale = 0.7;
 
     rug.scale.set(scale, scale, scale);
