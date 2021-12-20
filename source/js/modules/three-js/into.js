@@ -4,6 +4,9 @@ import SvgLoader from "./svg-loader/svg-loader";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import {colors} from "./scenes/helpers/colors";
 import {reflectivity} from "./scenes/helpers/reflectivity";
+import {loadModel} from "./3D/model-loader";
+import {setMaterial} from "./story";
+import modelsConfig from "./3D/models-config";
 
 export default class Intro extends ThreeJsCanvas {
   constructor(canvasId) {
@@ -65,6 +68,7 @@ export default class Intro extends ThreeJsCanvas {
     );
 
     this.loadSvg();
+    this.load3DObjects();
 
     loadManager.onLoad = () => {
       loadedTextures.forEach((texture, index) => {
@@ -178,6 +182,50 @@ export default class Intro extends ThreeJsCanvas {
     this.scene.add(snowflake);
   }
 
+  load3DObjects() {
+    this.loadPlane();
+    this.loadSuitcase();
+    this.loadWatermelon();
+  }
+
+  loadPlane() {
+    const name = `airplane`;
+    const material = setMaterial({color: modelsConfig[name].color, ...modelsConfig[name].reflectivity});
+
+    loadModel(name, material, (mesh) => {
+      mesh.name = name;
+      mesh.position.set(150, 80, 100);
+      mesh.rotation.copy(new THREE.Euler(80 * THREE.Math.DEG2RAD, 120 * THREE.Math.DEG2RAD, -30 * THREE.Math.DEG2RAD), `XYZ`);
+
+      this.scene.add(mesh);
+    });
+  }
+
+  loadSuitcase() {
+    const name = `suitcase`;
+
+    loadModel(name, null, (mesh) => {
+      mesh.name = name;
+      mesh.position.set(-80, -180, 40);
+      mesh.rotation.copy(new THREE.Euler(30 * THREE.Math.DEG2RAD, -135 * THREE.Math.DEG2RAD, -15 * THREE.Math.DEG2RAD), `XYZ`);
+      mesh.scale.set(0.6, 0.6, 0.6);
+
+      this.scene.add(mesh);
+    });
+  }
+
+  loadWatermelon() {
+    const name = `watermelon`;
+
+    loadModel(name, null, (mesh) => {
+      mesh.name = name;
+      mesh.position.set(-500, -280, 40);
+      mesh.rotation.copy(new THREE.Euler(10 * THREE.Math.DEG2RAD, 0, 130 * THREE.Math.DEG2RAD), `XYZ`);
+      mesh.scale.set(1.5, 1.5, 1.5);
+
+      this.scene.add(mesh);
+    });
+  }
 
   render() {
     requestAnimationFrame(this.render);
