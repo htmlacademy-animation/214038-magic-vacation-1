@@ -1,12 +1,7 @@
 import ThreeJsCanvas from "./three-js-canvas";
 import * as THREE from "three";
-import SvgLoader from "./svg-loader/svg-loader";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
-import {colors} from "./scenes/helpers/colors";
-import {reflectivity} from "./scenes/helpers/reflectivity";
-import {loadModel} from "./3D/model-loader";
-import {setMaterial} from "./story";
-import modelsConfig from "./3D/models-config";
+import IntroScene from "./scenes/intro-scene";
 
 export default class Intro extends ThreeJsCanvas {
   constructor(canvasId) {
@@ -56,7 +51,7 @@ export default class Intro extends ThreeJsCanvas {
     this.renderer.setSize(this.width, this.height);
 
     this.camera = new THREE.PerspectiveCamera(45, this.aspectRation, 0.1, 20000);
-    this.camera.position.z = 1200;
+    this.camera.position.z = 1405;
 
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
 
@@ -67,9 +62,6 @@ export default class Intro extends ThreeJsCanvas {
       ({src: textureLoader.load(texture.src), options: texture.options})
     );
 
-    this.loadSvg();
-    this.load3DObjects();
-
     loadManager.onLoad = () => {
       loadedTextures.forEach((texture, index) => {
         const geometry = new THREE.PlaneGeometry(1, 1);
@@ -79,6 +71,8 @@ export default class Intro extends ThreeJsCanvas {
         mesh.scale.x = this.textureWidth;
         mesh.scale.y = this.textureHeight;
         mesh.position.x = this.textureWidth * index;
+
+        this.scene.add(new IntroScene());
 
         const lights = this.setLights();
         lights.position.z = this.camera.position.z;
@@ -95,136 +89,20 @@ export default class Intro extends ThreeJsCanvas {
   setLights() {
     const light = new THREE.Group();
 
-    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.80);
+    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.60);
 
     lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
     light.add(lightUnit);
 
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.30, 3000, 1);
-    lightUnit.position.set(0, -350, 710);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.30, 3000, 0.5);
+    lightUnit.position.set(-730, -350, 0);
     light.add(lightUnit);
 
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.55, 3000, 1);
-    lightUnit.position.set(730, -800, 985);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.3, 3000, 0.5);
+    lightUnit.position.set(730, 400, 0);
     light.add(lightUnit);
 
     return light;
-  }
-
-  loadSvg() {
-    this.addBord();
-    this.getKeyHole();
-    this.getLeaf();
-    this.getFlamingo();
-    this.getQuestion();
-    this.getSnowFlake();
-  }
-
-  addBord() {
-    const plane = new THREE.PlaneGeometry(500, 500);
-    const planeMesh = new THREE.Mesh(plane, this.setMaterial({color: colors.Purple, ...reflectivity.basic, flatShading: true}));
-
-    planeMesh.position.set(0, 0, 5);
-    this.scene.add(planeMesh);
-  }
-
-  getKeyHole() {
-    const keyHole = new SvgLoader(`keyHole`).createSvgGroup();
-    const scale = 1.5;
-
-    keyHole.position.set(-1000 * scale, 1000 * scale, 0);
-    keyHole.scale.set(scale, -scale, scale);
-
-    this.scene.add(keyHole);
-  }
-
-  getLeaf() {
-    const leaf = new SvgLoader(`leaf`).createSvgGroup();
-    const scale = 1.6;
-
-    leaf.position.set(670, 350, 100);
-    leaf.scale.set(scale, -scale, scale);
-    leaf.rotation.copy(new THREE.Euler(10 * THREE.Math.DEG2RAD, 10 * THREE.Math.DEG2RAD, -60 * THREE.Math.DEG2RAD), `XYZ`);
-
-    this.scene.add(leaf);
-  }
-
-  getFlamingo() {
-    const flamingo = new SvgLoader(`flamingo`).createSvgGroup();
-    const scale = 2;
-
-    flamingo.position.set(-480, 370, 100);
-    flamingo.scale.set(-scale, -scale, scale);
-    flamingo.rotation.copy(new THREE.Euler(10 * THREE.Math.DEG2RAD, 30 * THREE.Math.DEG2RAD, 10 * THREE.Math.DEG2RAD), `XYZ`);
-
-    this.scene.add(flamingo);
-  }
-
-  getQuestion() {
-    const question = new SvgLoader(`question`).createSvgGroup();
-    const scale = 2;
-
-    question.position.set(100, -330, 100);
-    question.scale.set(scale, -scale, scale);
-    question.rotation.copy(new THREE.Euler(-30 * THREE.Math.DEG2RAD, 0, 20 * THREE.Math.DEG2RAD), `XYZ`);
-
-    this.scene.add(question);
-  }
-
-  getSnowFlake() {
-    const snowflake = new SvgLoader(`snowflake`).createSvgGroup();
-    const scale = 1.7;
-
-    snowflake.position.set(-450, -10, 100);
-    snowflake.scale.set(scale, scale, scale);
-    snowflake.rotation.copy(new THREE.Euler(-10 * THREE.Math.DEG2RAD, 30 * THREE.Math.DEG2RAD, 10 * THREE.Math.DEG2RAD), `XYZ`);
-
-    this.scene.add(snowflake);
-  }
-
-  load3DObjects() {
-    this.loadPlane();
-    this.loadSuitcase();
-    this.loadWatermelon();
-  }
-
-  loadPlane() {
-    const name = `airplane`;
-    const material = setMaterial({color: modelsConfig[name].color, ...modelsConfig[name].reflectivity});
-
-    loadModel(name, material, (mesh) => {
-      mesh.name = name;
-      mesh.position.set(150, 80, 100);
-      mesh.rotation.copy(new THREE.Euler(80 * THREE.Math.DEG2RAD, 120 * THREE.Math.DEG2RAD, -30 * THREE.Math.DEG2RAD), `XYZ`);
-
-      this.scene.add(mesh);
-    });
-  }
-
-  loadSuitcase() {
-    const name = `suitcase`;
-
-    loadModel(name, null, (mesh) => {
-      mesh.name = name;
-      mesh.position.set(-80, -180, 40);
-      mesh.rotation.copy(new THREE.Euler(30 * THREE.Math.DEG2RAD, -135 * THREE.Math.DEG2RAD, -15 * THREE.Math.DEG2RAD), `XYZ`);
-      mesh.scale.set(0.6, 0.6, 0.6);
-
-      this.scene.add(mesh);
-    });
-  }
-
-  loadWatermelon() {
-    const name = `watermelon`;
-
-    loadModel(name, null, (mesh) => {
-      mesh.name = name;
-      mesh.position.set(-500, -280, 40);
-      mesh.rotation.copy(new THREE.Euler(10 * THREE.Math.DEG2RAD, 0, 130 * THREE.Math.DEG2RAD), `XYZ`);
-      mesh.scale.set(1.5, 1.5, 1.5);
-
-      this.scene.add(mesh);
-    });
   }
 
   render() {
