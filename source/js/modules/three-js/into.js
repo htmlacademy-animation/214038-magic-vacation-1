@@ -53,7 +53,7 @@ export default class Intro extends ThreeJsCanvas {
     this.camera = new THREE.PerspectiveCamera(45, this.aspectRation, 0.1, 20000);
     this.camera.position.z = 1405;
 
-    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls = new OrbitControls(this.camera, document.getElementById(`top`));
 
 
     const loadManager = new THREE.LoadingManager();
