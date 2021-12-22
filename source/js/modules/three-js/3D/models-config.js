@@ -15,6 +15,26 @@ const modelsConfig = {
   watermelon: {
     type: `gltf`,
     path: `./3d/module-6/scene-0-objects/watermelon.gltf`,
+  },
+  wallCornerUnit: {
+    type: `obj`,
+    path: `3d/module-6/rooms-scenes/common/WallCornerUnit.obj`,
+  },
+  scene1: {
+    type: `gltf`,
+    path: `3d/module-6/rooms-scenes/scenesStatic/scene1-static-output-1.gltf`
+  },
+  scene2: {
+    type: `gltf`,
+    path: `3d/module-6/rooms-scenes/scenesStatic/scene2-static-output-1.gltf`
+  },
+  scene3: {
+    type: `gltf`,
+    path: `3d/module-6/rooms-scenes/scenesStatic/scene3-static-output-1.gltf`
+  },
+  scene4: {
+    type: `gltf`,
+    path: `3d/module-6/rooms-scenes/scenesStatic/scene4-static-output-1.gltf`
   }
 };
 

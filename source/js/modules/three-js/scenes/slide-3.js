@@ -2,6 +2,10 @@ import * as THREE from "three";
 import {setMaterial} from "../story";
 import Snowman from "./objects/snowman";
 import Road from "./objects/road";
+import {colors} from "./helpers/colors";
+import {reflectivity} from "./helpers/reflectivity";
+import {loadModel} from "../3D/model-loader";
+import Floor from "./objects/floor";
 
 class Scene3Slide extends THREE.Group {
   constructor() {
@@ -13,26 +17,51 @@ class Scene3Slide extends THREE.Group {
   constructChildren() {
     this.addSnowMan();
     this.addRoad();
+    this.getWall();
+    this.getFloor();
+    this.addSceneStatic();
   }
 
   addSnowMan() {
     const snowMan = new Snowman(setMaterial);
 
-    snowMan.rotation.copy(new THREE.Euler(15 * THREE.Math.DEG2RAD, -35 * THREE.Math.DEG2RAD, 0, `XYZ`));
-    snowMan.position.set(-130, -20, 0);
+    snowMan.position.set(220, 220, 400);
 
     this.add(snowMan);
   }
 
   addRoad() {
     const road = new Road();
-    const scale = 0.735;
-
-    road.scale.set(scale, scale, scale);
-    road.position.set(0, -100, 0);
-    road.rotation.copy(new THREE.Euler(13.5 * THREE.Math.DEG2RAD, -45 * THREE.Math.DEG2RAD, 0), `XYZ`);
 
     this.add(road);
+  }
+
+  getWall() {
+    const name = `wallCornerUnit`;
+    const material = setMaterial({color: colors.SkyLightBlue, ...reflectivity.soft, side: THREE.DoubleSide});
+
+    loadModel(name, material, (mesh) => {
+      mesh.name = name;
+
+      this.add(mesh);
+    });
+  }
+
+  getFloor() {
+    const material = setMaterial({color: colors.MountainBlue, ...reflectivity.soft, side: THREE.DoubleSide});
+    const mesh = new Floor(material);
+
+    this.add(mesh);
+  }
+
+  addSceneStatic() {
+    const name = `scene3`;
+
+    loadModel(name, null, (mesh) => {
+      mesh.name = name;
+
+      this.add(mesh);
+    });
   }
 }
 

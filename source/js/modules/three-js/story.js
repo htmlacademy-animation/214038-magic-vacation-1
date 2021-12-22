@@ -1,10 +1,8 @@
 import ThreeJsCanvas from "./three-js-canvas";
 import * as THREE from "three";
 import {storyRowShaderMaterial} from "./materials/simple-raw-shader-material";
-import Scene1Slide from "./scenes/slide-1";
-import Scene2Slide from "./scenes/slide-2";
-import Scene3Slide from "./scenes/slide-3";
-import Scene4Slide from "./scenes/slide-4";
+import AllStories from "./scenes/story-scenes-all";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
 let animationHueSettings = {
   initialHue: 0,
@@ -29,15 +27,18 @@ export default class Story extends ThreeJsCanvas {
       canvasId
     });
 
+    this.render = this.render.bind(this);
+    this.isAnimation = true;
+
     this.center = {x: this.width / 2, y: this.height / 2};
     this.isActiveTwoScreen = false;
     this.isNeedToRepeatCycleHue = true;
 
     this.textures = [
-      {src: `./img/module-5/scenes-textures/scene-1.png`, options: {hue: 0.0}, scene: new Scene1Slide()},
-      {src: `./img/module-5/scenes-textures/scene-2.png`, options: {hue: 0.0, isMagnifier: true}, scene: new Scene2Slide()},
-      {src: `./img/module-5/scenes-textures/scene-3.png`, options: {hue: 0.0}, scene: new Scene3Slide()},
-      {src: `./img/module-5/scenes-textures/scene-4.png`, options: {hue: 0.0}, scene: new Scene4Slide()}
+      {src: `./img/module-5/scenes-textures/scene-1.png`, options: {hue: 0.0}},
+      {src: `./img/module-5/scenes-textures/scene-2.png`, options: {hue: 0.0, isMagnifier: true}},
+      {src: `./img/module-5/scenes-textures/scene-3.png`, options: {hue: 0.0}},
+      {src: `./img/module-5/scenes-textures/scene-4.png`, options: {hue: 0.0}}
     ];
 
     this.bubbleGlareOffset = 0.8;
@@ -83,8 +84,6 @@ export default class Story extends ThreeJsCanvas {
   }
 
   init() {
-    const self = this;
-
     this.canvas = document.getElementById(this.canvasId);
     this.canvas.width = this.width;
     this.canvas.height = this.height;
@@ -106,57 +105,46 @@ export default class Story extends ThreeJsCanvas {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.width, this.height);
 
-    this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 1500);
-    this.camera.position.z = 1500;
+    this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 20000);
+    this.camera.position.z = 2550;
 
-    const loadManager = new THREE.LoadingManager();
-    const textureLoader = new THREE.TextureLoader(loadManager);
-    const loadedTextures = this.textures.map((texture) =>
-      ({src: textureLoader.load(texture.src), options: texture.options, scene: texture.scene})
-    );
+    this.controls = new OrbitControls(this.camera, document.getElementById(`story`));
 
-    loadManager.onLoad = () => {
-      loadedTextures.forEach((texture, index) => {
-        const geometry = new THREE.PlaneGeometry(1, 1);
-        const material = self.createMaterial(texture, index);
-        const mesh = new THREE.Mesh(geometry, material);
+    const lights = this.getLight();
+    this.lights = lights;
+    this.lights.position.z = this.camera.position.z;
 
-        mesh.scale.x = this.textureWidth;
-        mesh.scale.y = this.textureHeight;
-        mesh.position.x = this.textureWidth * index;
+    this.scene.add(lights);
 
-        if (texture.scene) {
-          texture.scene.position.x = this.textureWidth * index;
-          this.scene.add(texture.scene);
-        }
-
-        this.scene.add(mesh);
-
-        const lights = this.getLight();
-
-        lights.position.z = this.camera.position.z;
-        this.scene.add(lights);
-
-        this.render();
-      });
-    };
+    this.addSceneAllStory();
 
     this.render();
+  }
+
+  addSceneAllStory() {
+    const sceneAllStory = new AllStories();
+
+    sceneAllStory.position.set(0, 0, -3000);
+    sceneAllStory.rotation.copy(new THREE.Euler(0, -45 * THREE.Math.DEG2RAD, 0));
+
+    this.SceneAllStory = sceneAllStory;
+    this.scene.add(sceneAllStory);
+
+    this.setCamera(90);
   }
 
   getLight() {
     const light = new THREE.Group();
 
-    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.30);
-
-    lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
+    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.8);
+    lightUnit.position.set(0, 1000, 3000);
     light.add(lightUnit);
 
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.60, 3000, 1);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.5, 3000, 0.5);
     lightUnit.position.set(-785, -350, 710);
     light.add(lightUnit);
 
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.95, 3000, 1);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.5, 3000, 0.5);
     lightUnit.position.set(730, -800, 985);
     light.add(lightUnit);
 
@@ -190,11 +178,44 @@ export default class Story extends ThreeJsCanvas {
   }
 
   setScene(sceneID) {
-    this.camera.position.x = this.textureWidth * sceneID;
-    this.render();
+    let angle = 0;
+    this.isAnimation = false;
+
+    if (sceneID === 0) {
+      angle = 90;
+    } else if (sceneID === 1) {
+      angle = 0;
+    } else if (sceneID === 2) {
+      angle = -90;
+    } else if (sceneID === 3) {
+      angle = 180;
+    }
 
     // запускем функцию, где определяется что второй слайд и запускаются эффекты для второго слайда
     this.actionSlideTwo(sceneID);
+
+    this.setCamera(angle);
+  }
+
+  setCamera(angle) {
+    const posX = 2150 * Math.cos(angle * THREE.Math.DEG2RAD);
+    const posZ = 2150 * Math.sin(angle * THREE.Math.DEG2RAD);
+
+    this.camera.position.set(this.SceneAllStory.position.x + posX, 800, this.SceneAllStory.position.z + posZ);
+
+    this.controls.target.set(this.SceneAllStory.position.x, this.SceneAllStory.position.y, this.SceneAllStory.position.z);
+
+    this.setPositionLight();
+
+    setTimeout(() => {
+      this.isAnimation = true;
+      this.render();
+    }, 100);
+  }
+
+  setPositionLight() {
+    this.lights.position.x = this.camera.position.x;
+    this.lights.position.z = this.camera.position.z;
   }
 
   actionSlideTwo(sceneID) {
@@ -249,12 +270,10 @@ export default class Story extends ThreeJsCanvas {
     if (this.isActiveTwoScreen) {
       requestAnimationFrame(() => {
         this.startAnimate();
-        this.render();
       });
     } else {
       cancelAnimationFrame(() => {
         this.startAnimate();
-        this.render();
       });
     }
   }
@@ -302,5 +321,16 @@ export default class Story extends ThreeJsCanvas {
 
   getRandomNumber(min, max) {
     return Math.random() * (max - min) + min;
+  }
+
+  render() {
+    this.controls.update();
+    this.renderer.render(this.scene, this.camera);
+
+    if (this.isAnimation) {
+      requestAnimationFrame(this.render);
+    } else {
+      cancelAnimationFrame(this.render);
+    }
   }
 }
