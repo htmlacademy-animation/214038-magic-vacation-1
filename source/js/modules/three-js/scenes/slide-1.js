@@ -7,12 +7,14 @@ import {loadModel} from "../3D/model-loader";
 import {colors} from "./helpers/colors";
 import {reflectivity} from "./helpers/reflectivity";
 import Floor from "./objects/floor";
+import isMobile from "./utils/detect-mobile";
 
 export default class Scene1Slide extends THREE.Group {
   constructor() {
     super();
 
     this.constructChildren();
+    this.isShadow = !isMobile;
   }
 
   constructChildren() {
@@ -22,6 +24,7 @@ export default class Scene1Slide extends THREE.Group {
     this.getWall();
     this.getFloor();
     this.addSceneStatic();
+    this.getDog();
   }
 
   addFlowers() {
@@ -72,6 +75,18 @@ export default class Scene1Slide extends THREE.Group {
 
     loadModel(name, null, (mesh) => {
       mesh.name = name;
+
+      this.add(mesh);
+    });
+  }
+
+  getDog() {
+    const name = `dog`;
+
+    loadModel(name, null, (mesh) => {
+      mesh.name = name;
+      mesh.position.set(500, 0, 430);
+      mesh.rotation.copy(new THREE.Euler(0, 60 * THREE.Math.DEG2RAD, 0));
 
       this.add(mesh);
     });

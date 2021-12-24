@@ -1,6 +1,7 @@
 import * as THREE from 'three';
 import {SVGLoader} from "three/examples/jsm/loaders/SVGLoader";
 import svgConfig from "./svg-config";
+import isMobile from "../scenes/utils/detect-mobile";
 
 export default class SvgLoader {
   constructor(
@@ -35,6 +36,10 @@ export default class SvgLoader {
                 bevelThickness: svgConfig[self.name].cap
               });
               const mesh = new THREE.Mesh(geometry, material);
+
+              if (!isMobile) {
+                mesh.castShadow = svgConfig[self.name].castShadow;
+              }
 
               group.add(mesh);
             }

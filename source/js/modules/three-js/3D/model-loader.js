@@ -1,6 +1,7 @@
 import {OBJLoader} from "three/examples/jsm/loaders/OBJLoader";
 import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
 import modelsConfig from "./models-config";
+import isMobile from "../scenes/utils/detect-mobile";
 
 
 const loadObj = (path, onComplete) => {
@@ -15,11 +16,20 @@ const loadGltf = (path, onComplete) => {
   loaderGltf.load(path, onComplete);
 };
 
-const onComplete = (obj3d, material, callback) => {
+const onComplete = (obj3d, material, params, callback) => {
   if (material) {
     obj3d.traverse((child) => {
       if (child.isMesh) {
         child.material = material;
+      }
+    });
+  }
+
+  if (!isMobile) {
+    obj3d.traverse((child) => {
+      if (child.isMesh) {
+        child.castShadow = params.castShadow;
+        child.receiveShadow = params.receiveShadow;
       }
     });
   }
@@ -41,7 +51,7 @@ export const loadModel = (key, material, callback) => {
       return;
     }
 
-    onComplete(gltf.scene, material, callback);
+    onComplete(gltf.scene, material, params, callback);
   };
 
   switch (params.type) {
@@ -50,7 +60,7 @@ export const loadModel = (key, material, callback) => {
 
       break;
     default:
-      loadObj(params.path, (model) => onComplete(model, material, callback));
+      loadObj(params.path, (model) => onComplete(model, material, params, callback));
 
       break;
   }

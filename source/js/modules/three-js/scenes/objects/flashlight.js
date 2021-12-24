@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import {colors} from "../helpers/colors";
 import {reflectivity} from "../helpers/reflectivity";
+import isMobile from "../utils/detect-mobile";
 
 export default class Flashlight extends THREE.Group {
   constructor(material) {
@@ -9,6 +10,7 @@ export default class Flashlight extends THREE.Group {
     this.color = colors.Blue;
     this.colorLantern = colors.LightBlue;
     this.material = material;
+    this.isShadow = !isMobile;
 
     this.constructChildren();
   }
@@ -27,6 +29,7 @@ export default class Flashlight extends THREE.Group {
     const mesh = new THREE.Mesh(cylinder, this.material({color: this.color, ...reflectivity.soft}));
 
     this.cylinderMesh = mesh;
+    this.cylinderMesh.castShadow = this.isShadow;
 
     this.add(mesh);
   }
@@ -39,6 +42,7 @@ export default class Flashlight extends THREE.Group {
 
     this.sphereMesh = mesh;
     mesh.position.set(0, topOffset, 0);
+    mesh.castShadow = this.isShadow;
 
     this.add(mesh);
   }
@@ -51,6 +55,7 @@ export default class Flashlight extends THREE.Group {
 
     this.centreCylinderMesh = mesh;
     mesh.position.set(0, topOffset, 0);
+    mesh.castShadow = this.isShadow;
 
     this.add(mesh);
   }
@@ -63,6 +68,7 @@ export default class Flashlight extends THREE.Group {
 
     this.lampStand = mesh;
     mesh.position.set(0, topOffset, 0);
+    mesh.castShadow = this.isShadow;
 
     this.add(mesh);
   }
@@ -76,6 +82,7 @@ export default class Flashlight extends THREE.Group {
     this.lanternMesh = mesh;
     mesh.position.set(0, topOffset, 0);
     mesh.rotation.copy(new THREE.Euler(0, 45 * THREE.Math.DEG2RAD, 0, `XYZ`));
+    mesh.castShadow = this.isShadow;
 
     this.add(mesh);
   }
@@ -88,6 +95,7 @@ export default class Flashlight extends THREE.Group {
 
     mesh.position.set(0, topOffset, 0);
     mesh.rotation.copy(new THREE.Euler(0, 45 * THREE.Math.DEG2RAD, 0, `XYZ`));
+    mesh.castShadow = this.isShadow;
 
     this.add(mesh);
   }

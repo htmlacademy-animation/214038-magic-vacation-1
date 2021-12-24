@@ -4,6 +4,15 @@ import {storyRowShaderMaterial} from "./materials/simple-raw-shader-material";
 import AllStories from "./scenes/story-scenes-all";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 
+import Stats from "three/examples/jsm/libs/stats.module";
+import {loadModel} from "./3D/model-loader";
+import isMobile from "./scenes/utils/detect-mobile";
+
+// добавление инструмента для измерения FPS
+const stats = new Stats();
+stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+document.body.appendChild(stats.dom);
+
 let animationHueSettings = {
   initialHue: 0,
   finalHue: -0.4,
@@ -105,6 +114,11 @@ export default class Story extends ThreeJsCanvas {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.width, this.height);
 
+    if (!isMobile) {
+      this.renderer.shadowMap.enabled = true;
+      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    }
+
     this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 20000);
     this.camera.position.z = 2550;
 
@@ -117,6 +131,7 @@ export default class Story extends ThreeJsCanvas {
     this.scene.add(lights);
 
     this.addSceneAllStory();
+    this.getSuitcase();
 
     this.render();
   }
@@ -130,22 +145,38 @@ export default class Story extends ThreeJsCanvas {
     this.SceneAllStory = sceneAllStory;
     this.scene.add(sceneAllStory);
 
-    this.setCamera(90);
+    this.setCamera(90, true);
   }
 
   getLight() {
     const light = new THREE.Group();
 
-    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.8);
-    lightUnit.position.set(0, 1000, 3000);
+    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.6);
+    lightUnit.position.set(200, 0, 3000);
     light.add(lightUnit);
 
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.5, 3000, 0.5);
-    lightUnit.position.set(-785, -350, 710);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.3);
+    lightUnit.position.set(-500, 700, -700);
+
+    if (!isMobile) {
+      lightUnit.castShadow = true;
+      lightUnit.shadow.camera.far = 3000;
+      lightUnit.shadow.mapSize.width = 1000;
+      lightUnit.shadow.mapSize.height = 1000;
+    }
+
     light.add(lightUnit);
 
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.5, 3000, 0.5);
-    lightUnit.position.set(730, -800, 985);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.3);
+    lightUnit.position.set(500, 1500, -700);
+
+    if (!isMobile) {
+      lightUnit.castShadow = true;
+      lightUnit.shadow.camera.far = 3000;
+      lightUnit.shadow.mapSize.width = 1000;
+      lightUnit.shadow.mapSize.height = 1000;
+    }
+
     light.add(lightUnit);
 
     return light;
@@ -194,18 +225,17 @@ export default class Story extends ThreeJsCanvas {
     // запускем функцию, где определяется что второй слайд и запускаются эффекты для второго слайда
     this.actionSlideTwo(sceneID);
 
-    this.setCamera(angle);
+    this.setCamera(angle, false);
   }
 
-  setCamera(angle) {
+  setCamera(angle, isFirsLoad) {
     const posX = 2150 * Math.cos(angle * THREE.Math.DEG2RAD);
     const posZ = 2150 * Math.sin(angle * THREE.Math.DEG2RAD);
 
     this.camera.position.set(this.SceneAllStory.position.x + posX, 800, this.SceneAllStory.position.z + posZ);
-
     this.controls.target.set(this.SceneAllStory.position.x, this.SceneAllStory.position.y, this.SceneAllStory.position.z);
 
-    this.setPositionLight();
+    this.setPositionLight(isFirsLoad, angle);
 
     setTimeout(() => {
       this.isAnimation = true;
@@ -213,9 +243,41 @@ export default class Story extends ThreeJsCanvas {
     }, 100);
   }
 
-  setPositionLight() {
+  setPositionLight(isFirsLoad, angle) {
     this.lights.position.x = this.camera.position.x;
     this.lights.position.z = this.camera.position.z;
+
+    let angleObj;
+    let positionX;
+    let positionZ;
+
+    switch (angle) {
+      case 90:
+        angleObj = 0;
+        positionX = 0;
+        positionZ = 0;
+        break;
+      case 0:
+        angleObj = 90;
+        positionX = 3050;
+        positionZ = -3050;
+        break;
+      case -90:
+        angleObj = 180;
+        positionX = -60;
+        positionZ = -5980;
+        break;
+      case 180:
+        angleObj = -90;
+        positionX = -3000;
+        positionZ = -3000;
+        break;
+    }
+
+    if (!isFirsLoad) {
+      this.suitcase.rotation.copy(new THREE.Euler(0, angleObj * THREE.Math.DEG2RAD, 0));
+      this.suitcase.position.set(positionX, 0, positionZ);
+    }
   }
 
   actionSlideTwo(sceneID) {
@@ -323,9 +385,28 @@ export default class Story extends ThreeJsCanvas {
     return Math.random() * (max - min) + min;
   }
 
+  getSuitcase() {
+    const suitcaseGroup = new THREE.Group();
+    const name = `suitcase`;
+
+    loadModel(name, null, (mesh) => {
+      mesh.name = name;
+      mesh.position.set(-400, 0, -2230);
+      mesh.rotation.copy(new THREE.Euler(0, -25 * THREE.Math.DEG2RAD, 0));
+
+      suitcaseGroup.add(mesh);
+    });
+
+    this.suitcase = suitcaseGroup;
+
+    this.scene.add(suitcaseGroup);
+  }
+
   render() {
+    stats.begin();
     this.controls.update();
     this.renderer.render(this.scene, this.camera);
+    stats.end();
 
     if (this.isAnimation) {
       requestAnimationFrame(this.render);

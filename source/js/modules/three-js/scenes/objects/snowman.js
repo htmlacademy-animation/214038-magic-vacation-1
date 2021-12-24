@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import {colors} from "../helpers/colors";
 import {reflectivity} from "../helpers/reflectivity";
+import isMobile from "../utils/detect-mobile";
 
 export default class Snowman extends THREE.Group {
   constructor(material) {
@@ -9,6 +10,7 @@ export default class Snowman extends THREE.Group {
     this.colorBall = colors.SnowColor;
     this.colorCone = colors.Orange;
     this.material = material;
+    this.isShadow = !isMobile;
 
     this.constructChildren();
   }
@@ -24,6 +26,7 @@ export default class Snowman extends THREE.Group {
     const mesh = new THREE.Mesh(boll, this.material({color: this.colorBall, ...reflectivity.strong}));
 
     this.smallBoll = mesh;
+    this.smallBoll.castShadow = this.isShadow;
 
     this.add(mesh);
   }
@@ -33,6 +36,7 @@ export default class Snowman extends THREE.Group {
     const mesh = new THREE.Mesh(boll, this.material({color: this.colorBall, ...reflectivity.strong}));
 
     mesh.position.set(0, -108, 0);
+    mesh.castShadow = this.isShadow;
 
     this.add(mesh);
   }
@@ -46,6 +50,7 @@ export default class Snowman extends THREE.Group {
 
     mesh.position.set(leftOffset, topOffset, 0);
     mesh.rotation.copy(new THREE.Euler(0, 0, -90 * THREE.Math.DEG2RAD, `XYZ`));
+    mesh.castShadow = this.isShadow;
 
     this.add(mesh);
   }

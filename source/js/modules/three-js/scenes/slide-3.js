@@ -20,6 +20,7 @@ class Scene3Slide extends THREE.Group {
     this.getWall();
     this.getFloor();
     this.addSceneStatic();
+    this.getCompass();
   }
 
   addSnowMan() {
@@ -56,6 +57,16 @@ class Scene3Slide extends THREE.Group {
 
   addSceneStatic() {
     const name = `scene3`;
+
+    loadModel(name, null, (mesh) => {
+      mesh.name = name;
+
+      this.add(mesh);
+    });
+  }
+
+  getCompass() {
+    const name = `compass`;
 
     loadModel(name, null, (mesh) => {
       mesh.name = name;
