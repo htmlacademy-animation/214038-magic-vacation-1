@@ -20,6 +20,7 @@ export default class Scene4Slide extends THREE.Group {
     this.getWall();
     this.getFloor();
     this.addSceneStatic();
+    this.getSonya();
   }
 
   addSaturn() {
@@ -59,6 +60,18 @@ export default class Scene4Slide extends THREE.Group {
 
     loadModel(name, null, (mesh) => {
       mesh.name = name;
+
+      this.add(mesh);
+    });
+  }
+
+  getSonya() {
+    const name = `sonya`;
+
+    loadModel(name, null, (mesh) => {
+      mesh.name = name;
+      mesh.position.set(450, 150, 300);
+      mesh.rotation.copy(new THREE.Euler(0, 10 * THREE.Math.DEG2RAD, 0));
 
       this.add(mesh);
     });
