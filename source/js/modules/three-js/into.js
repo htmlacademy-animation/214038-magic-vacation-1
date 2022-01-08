@@ -2,6 +2,8 @@ import ThreeJsCanvas from "./three-js-canvas";
 import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import IntroScene from "./scenes/intro-scene";
+import {animateIntroObjects} from "./scenes/helpers/animate-object";
+import {meshObjects} from "./scenes/intro-scene";
 
 export default class Intro extends ThreeJsCanvas {
   constructor(canvasId) {
@@ -80,6 +82,7 @@ export default class Intro extends ThreeJsCanvas {
 
         this.scene.add(mesh);
         this.render();
+        this.startAnimations();
       });
     };
 
@@ -103,6 +106,37 @@ export default class Intro extends ThreeJsCanvas {
     light.add(lightUnit);
 
     return light;
+  }
+
+  startAnimations() {
+    let timerId = setInterval(() => {
+      let stopTimer = false;
+
+      this.flamingo = meshObjects.flamingo;
+      this.leaf = meshObjects.leaf;
+      this.question = meshObjects.question;
+      this.snowflake = meshObjects.snowflake;
+      this.watermelon = meshObjects.watermelon;
+
+      this.objectsArray = [
+        this.flamingo,
+        this.leaf,
+        this.question,
+        this.snowflake,
+        this.watermelon
+      ];
+
+      this.objectsArray.forEach((item) => {
+        if (!item) {
+          stopTimer = true;
+        }
+      });
+
+      if (!stopTimer) {
+        clearInterval(timerId);
+        animateIntroObjects(this.objectsArray);
+      }
+    }, 100);
   }
 
   render() {
