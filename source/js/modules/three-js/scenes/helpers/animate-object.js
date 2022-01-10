@@ -17,7 +17,6 @@ class AnimateObject extends THREE.Group {
     this.object = object;
 
     this.startTime = -1;
-    this.time = -1;
 
     this.animationStop = false;
 
@@ -58,9 +57,7 @@ class AnimateObject extends THREE.Group {
     this.update();
 
     if (this.animationStop) {
-      cancelAnimationFrame(() => {
-        this.loop();
-      });
+      cancelAnimationFrame(this.loop);
     } else {
       requestAnimationFrame(this.loop);
     }
@@ -69,7 +66,6 @@ class AnimateObject extends THREE.Group {
   update() {
     if (this.startTime < 0) {
       this.startTime = Date.now();
-      this.time = this.startTime;
 
       return;
     }
@@ -78,8 +74,6 @@ class AnimateObject extends THREE.Group {
     const time = (nowTime - this.startTime) * 0.001;
 
     this.updateObjectParameters(time);
-
-    this.time = nowTime;
   }
 
   updateObjectParameters(time) {

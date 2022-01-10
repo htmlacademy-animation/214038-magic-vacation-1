@@ -106,6 +106,26 @@ export default class FullPageScroll {
       this.counterCodesAnimation.startCounter();
     }
 
+    if (this.screenElements[this.activeScreen][`id`] === `story`) {
+      const event = new Event(`activeStory`);
+
+      document.body.dispatchEvent(event);
+    } else {
+      const event = new Event(`notActiveStory`);
+
+      document.body.dispatchEvent(event);
+    }
+
+    if (this.screenElements[this.activeScreen][`id`] === `top`) {
+      const event = new Event(`activeIntro`);
+
+      document.body.dispatchEvent(event);
+    } else {
+      const event = new Event(`notActiveIntro`);
+
+      document.body.dispatchEvent(event);
+    }
+
     this.initCounter(this.screenElements[this.activeScreen][`id`]);
   }
 

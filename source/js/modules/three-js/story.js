@@ -7,6 +7,7 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from "three/examples/jsm/libs/stats.module";
 import {loadModel} from "./3D/model-loader";
 import isMobile from "./scenes/utils/detect-mobile";
+import AnimationSuitcase from "./scenes/helpers/animate-suicase";
 
 // добавление инструмента для измерения FPS
 const stats = new Stats();
@@ -42,6 +43,7 @@ export default class Story extends ThreeJsCanvas {
     this.center = {x: this.width / 2, y: this.height / 2};
     this.isActiveTwoScreen = false;
     this.isNeedToRepeatCycleHue = true;
+    this.firstLoaded = true;
 
     this.textures = [
       {src: `./img/module-5/scenes-textures/scene-1.png`, options: {hue: 0.0}},
@@ -132,8 +134,6 @@ export default class Story extends ThreeJsCanvas {
 
     this.addSceneAllStory();
     this.getSuitcase();
-
-    this.render();
   }
 
   addSceneAllStory() {
@@ -145,7 +145,30 @@ export default class Story extends ThreeJsCanvas {
     this.SceneAllStory = sceneAllStory;
     this.scene.add(sceneAllStory);
 
-    this.setCamera(90, true);
+    this.toggleRendering();
+  }
+
+  toggleRendering() {
+    document.body.addEventListener(`activeStory`, () => {
+      if (this.firstLoaded && this.suitcaseIsLoaded) {
+        this.animateSuitcase();
+      } else if (this.firstLoaded && !this.suitcaseIsLoaded) {
+        const timerId = setInterval(() => {
+          if (this.suitcaseIsLoaded) {
+            this.animateSuitcase();
+            clearInterval(timerId);
+          }
+        }, 100);
+      }
+
+      this.firstLoaded = false;
+      this.isAnimation = true;
+      this.setCamera(90, true);
+    });
+
+    document.body.addEventListener(`notActiveStory`, () => {
+      this.isAnimation = false;
+    });
   }
 
   getLight() {
@@ -391,15 +414,20 @@ export default class Story extends ThreeJsCanvas {
 
     loadModel(name, null, (mesh) => {
       mesh.name = name;
-      mesh.position.set(-400, 0, -2230);
+      mesh.position.set(-400, 100, -2230);
       mesh.rotation.copy(new THREE.Euler(0, -25 * THREE.Math.DEG2RAD, 0));
 
       suitcaseGroup.add(mesh);
+
+      this.suitcaseIsLoaded = true;
     });
 
     this.suitcase = suitcaseGroup;
-
     this.scene.add(suitcaseGroup);
+  }
+
+  animateSuitcase() {
+    const animationSuitcase = new AnimationSuitcase(this.suitcase);
   }
 
   render() {
