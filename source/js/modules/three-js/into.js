@@ -14,6 +14,7 @@ export default class Intro extends ThreeJsCanvas {
     this.textures = [{src: `./img/module-5/scenes-textures/scene-0.png`, options: {hue: 0.0}}];
     this.render = this.render.bind(this);
     this.firstLoaded = true;
+    this.isAnimation = true;
   }
 
   setMaterial(options = {}) {
@@ -80,13 +81,26 @@ export default class Intro extends ThreeJsCanvas {
         lights.position.z = this.camera.position.z;
         this.scene.add(lights);
 
-        this.scene.add(mesh);
+        // this.scene.add(mesh);
         this.render();
         this.startAnimations();
       });
     };
 
     this.render();
+
+    this.toggleRendering();
+  }
+
+  toggleRendering() {
+    document.body.addEventListener(`activeIntro`, () => {
+      this.isAnimation = true;
+      this.render();
+    });
+
+    document.body.addEventListener(`notActiveIntro`, () => {
+      this.isAnimation = false;
+    });
   }
 
   setLights() {
@@ -140,7 +154,11 @@ export default class Intro extends ThreeJsCanvas {
   }
 
   render() {
-    requestAnimationFrame(this.render);
+    if (this.isAnimation) {
+      requestAnimationFrame(this.render);
+    } else {
+      cancelAnimationFrame(this.render);
+    }
 
     this.renderer.render(this.scene, this.camera);
   }
