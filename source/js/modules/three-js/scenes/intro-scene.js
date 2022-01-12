@@ -115,12 +115,21 @@ export default class IntroScene extends THREE.Group {
     const name = `suitcase`;
 
     loadModel(name, null, (mesh) => {
-      mesh.name = name;
-      mesh.position.set(-80, -180, 40);
-      mesh.rotation.copy(new THREE.Euler(30 * THREE.Math.DEG2RAD, -135 * THREE.Math.DEG2RAD, -15 * THREE.Math.DEG2RAD), `XYZ`);
-      mesh.scale.set(0.6, 0.6, 0.6);
+      const groupScale = this.getGroupSuitcase(`scale`, mesh);
+      const groupRotation = this.getGroupSuitcase(`rotation`, groupScale);
+      const groupPositionXY = this.getGroupSuitcase(`positionXY`, groupRotation);
+      const groupMove = this.getGroupSuitcase(`move`, groupPositionXY);
 
-      this.add(mesh);
+      mesh.rotation.copy(new THREE.Euler(0, -90 * THREE.Math.DEG2RAD, 0));
+
+      groupScale.scale.set(0, 0, 0);
+      groupMove.position.set(0, 0, 50);
+      groupRotation.rotation.copy(new THREE.Euler(-100 * THREE.Math.DEG2RAD, 0, 0));
+
+      this.suitcase = groupMove;
+      meshObjects.suitcase = this.suitcase;
+
+      this.add(this.suitcase);
     });
   }
 
@@ -137,6 +146,15 @@ export default class IntroScene extends THREE.Group {
 
       this.add(mesh);
     });
+  }
+
+  getGroupSuitcase(name, child) {
+    const group = new THREE.Group();
+
+    group.name = name;
+    group.add(child);
+
+    return group;
   }
 }
 
