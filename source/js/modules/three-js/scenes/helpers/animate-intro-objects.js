@@ -7,11 +7,11 @@ const tick = (from, to, progress) => from + progress * (to - from);
 export const animateIntroObjects = (animateObjects) => {
   // для каждого объекта создается класс, отвечающий за анимацию
   animateObjects.forEach((object) => {
-    const animateObject = new AnimateObject(object);
+    const animateObject = new AnimateIntroObjects(object);
   });
 };
 
-class AnimateObject extends THREE.Group {
+class AnimateIntroObjects extends THREE.Group {
   constructor(object) {
     super();
     this.object = object;

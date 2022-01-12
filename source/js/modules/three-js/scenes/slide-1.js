@@ -8,6 +8,7 @@ import {colors} from "./helpers/colors";
 import {reflectivity} from "./helpers/reflectivity";
 import Floor from "./objects/floor";
 import isMobile from "./utils/detect-mobile";
+import {animationDogTail, animationSaturn} from "./helpers/animate-other-objects";
 
 export default class Scene1Slide extends THREE.Group {
   constructor() {
@@ -15,6 +16,12 @@ export default class Scene1Slide extends THREE.Group {
 
     this.constructChildren();
     this.isShadow = !isMobile;
+    this.startTime = -1;
+
+    this.isLoadedDog = false;
+    this.animationStart = false;
+
+    this.loop = this.loop.bind(this);
   }
 
   constructChildren() {
@@ -25,6 +32,7 @@ export default class Scene1Slide extends THREE.Group {
     this.getFloor();
     this.addSceneStatic();
     this.getDog();
+    this.toggleAnimations();
   }
 
   addFlowers() {
@@ -48,6 +56,8 @@ export default class Scene1Slide extends THREE.Group {
     const saturn = new Saturn(`slide1`);
 
     saturn.position.set(320, 500, 200);
+
+    this.saturn = saturn;
 
     this.add(saturn);
   }
@@ -88,7 +98,49 @@ export default class Scene1Slide extends THREE.Group {
       mesh.position.set(500, 0, 430);
       mesh.rotation.copy(new THREE.Euler(0, 60 * THREE.Math.DEG2RAD, 0));
 
+      this.dog = mesh;
+      this.isLoadedDog = true;
+
       this.add(mesh);
+    });
+  }
+
+  loop() {
+    this.animations();
+
+    if (this.animationStart) {
+      requestAnimationFrame(this.loop);
+    } else {
+      cancelAnimationFrame(this.loop);
+    }
+  }
+
+  animations() {
+    if (this.startTime < 0) {
+      this.startTime = Date.now();
+
+      return;
+    }
+
+    if (!this.isLoadedDog) {
+      return;
+    }
+
+    const nowTime = Date.now();
+    const time = (nowTime - this.startTime) * 0.001;
+
+    animationDogTail(time, this.dog.getObjectByName(`Tail`));
+    animationSaturn(time, this.saturn);
+  }
+
+  toggleAnimations() {
+    document.body.addEventListener(`activeAnimationSlide1`, () => {
+      this.animationStart = true;
+      this.loop();
+    });
+
+    document.body.addEventListener(`activeAnimationSlide2`, () => {
+      this.animationStart = false;
     });
   }
 }

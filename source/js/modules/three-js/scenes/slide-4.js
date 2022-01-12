@@ -6,10 +6,16 @@ import {colors} from "./helpers/colors";
 import {reflectivity} from "./helpers/reflectivity";
 import {loadModel} from "../3D/model-loader";
 import Floor from "./objects/floor";
+import {animationSaturn, animationSonya} from "./helpers/animate-other-objects";
 
 export default class Scene4Slide extends THREE.Group {
   constructor() {
     super();
+
+    this.animationStart = false;
+    this.startTime = -1;
+
+    this.loop = this.loop.bind(this);
 
     this.constructChildren();
   }
@@ -21,6 +27,7 @@ export default class Scene4Slide extends THREE.Group {
     this.getFloor();
     this.addSceneStatic();
     this.getSonya();
+    this.toggleAnimations();
   }
 
   addSaturn() {
@@ -28,6 +35,7 @@ export default class Scene4Slide extends THREE.Group {
 
     saturn.position.set(350, 500, 200);
 
+    this.saturn = saturn;
     this.add(saturn);
   }
 
@@ -73,7 +81,49 @@ export default class Scene4Slide extends THREE.Group {
       mesh.position.set(450, 150, 300);
       mesh.rotation.copy(new THREE.Euler(0, 10 * THREE.Math.DEG2RAD, 0));
 
+      this.sonya = mesh;
+      this.sonya.getObjectByName(`RightHand`).rotation.y = -1.3;
+      this.sonya.getObjectByName(`LeftHand`).rotation.y = 1.3;
       this.add(mesh);
+    });
+  }
+
+  loop() {
+    this.animations();
+
+    if (this.animationStart) {
+      requestAnimationFrame(this.loop);
+    } else {
+      cancelAnimationFrame(this.loop);
+    }
+  }
+
+  animations() {
+    if (this.startTime < 0) {
+      this.startTime = Date.now();
+
+      return;
+    }
+
+    const nowTime = Date.now();
+    const time = (nowTime - this.startTime) * 0.001;
+
+    const sonya = this.sonya.getObjectByName(`Sonya_Null`);
+    const rightHand = this.sonya.getObjectByName(`RightHand`);
+    const leftHand = this.sonya.getObjectByName(`LeftHand`);
+
+    animationSonya(time, sonya, rightHand, leftHand);
+    animationSaturn(time, this.saturn);
+  }
+
+  toggleAnimations() {
+    document.body.addEventListener(`activeAnimationSlide4`, () => {
+      this.animationStart = true;
+      this.loop();
+    });
+
+    document.body.addEventListener(`activeAnimationSlide3`, () => {
+      this.animationStart = false;
     });
   }
 }

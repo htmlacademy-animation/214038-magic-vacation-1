@@ -40,6 +40,7 @@ export default class Saturn extends THREE.Group {
 
     ringMesh.rotation.copy(new THREE.Euler(20 * THREE.Math.DEG2RAD, 0, 18 * THREE.Math.DEG2RAD), `XYZ`);
     ringMesh.castShadow = this.isShadow;
+    ringMesh.name = `ring;`;
 
     this.add(ringMesh);
   }

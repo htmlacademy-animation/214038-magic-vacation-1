@@ -7,10 +7,16 @@ import {loadModel} from "../3D/model-loader";
 import {colors} from "./helpers/colors";
 import {reflectivity} from "./helpers/reflectivity";
 import Floor from "./objects/floor";
+import {animationLeaf} from "./helpers/animate-other-objects";
 
 export default class Scene2Slide extends THREE.Group {
   constructor() {
     super();
+
+    this.animationStart = false;
+    this.startTime = -1;
+
+    this.loop = this.loop.bind(this);
 
     this.constructChildren();
   }
@@ -23,6 +29,7 @@ export default class Scene2Slide extends THREE.Group {
     this.getWall();
     this.getFloor();
     this.addSceneStatic();
+    this.toggleAnimations();
   }
 
   addPyramid() {
@@ -46,25 +53,35 @@ export default class Scene2Slide extends THREE.Group {
   }
 
   addLeaf1() {
-    const leaf = new SvgLoader(`leafPyramid`).createSvgGroup();
+    const leafGroup = new THREE.Group();
+    let leaf = new SvgLoader(`leafPyramid`).createSvgGroup();
     const scale = 1.6;
 
-    leaf.position.set(80, 250, 350);
-    leaf.scale.set(scale, -scale, scale);
-    leaf.rotation.copy(new THREE.Euler(0, 90 * THREE.Math.DEG2RAD, -10 * THREE.Math.DEG2RAD), `XYZ`);
+    leaf.position.set(-60, -120, 0);
 
-    this.add(leaf);
+    leafGroup.add(leaf);
+    leafGroup.position.set(80, 0, 350);
+    leafGroup.scale.set(scale, -scale, scale);
+    leafGroup.rotation.copy(new THREE.Euler(0, 90 * THREE.Math.DEG2RAD, -10 * THREE.Math.DEG2RAD), `XYZ`);
+
+    this.leaf1 = leafGroup;
+    this.add(leafGroup);
   }
 
   addLeaf2() {
-    const leaf = new SvgLoader(`leafPyramid`).createSvgGroup();
+    const leafGroup = new THREE.Group();
+    let leaf = new SvgLoader(`leafPyramid`).createSvgGroup();
     const scale = 1.4;
 
-    leaf.position.set(65, 120, 420);
-    leaf.scale.set(scale, -scale, scale);
-    leaf.rotation.copy(new THREE.Euler(0, 90 * THREE.Math.DEG2RAD, 35 * THREE.Math.DEG2RAD), `XYZ`);
+    leaf.position.set(-60, -120, 0);
 
-    this.add(leaf);
+    leafGroup.add(leaf);
+    leafGroup.position.set(75, 0, 420);
+    leafGroup.scale.set(scale, -scale, scale);
+    leafGroup.rotation.copy(new THREE.Euler(0, 90 * THREE.Math.DEG2RAD, 35 * THREE.Math.DEG2RAD), `XYZ`);
+
+    this.leaf2 = leafGroup;
+    this.add(leafGroup);
   }
 
   getWall() {
@@ -92,6 +109,42 @@ export default class Scene2Slide extends THREE.Group {
       mesh.name = name;
 
       this.add(mesh);
+    });
+  }
+
+  loop() {
+    this.animations();
+
+    if (this.animationStart) {
+      requestAnimationFrame(this.loop);
+    } else {
+      cancelAnimationFrame(this.loop);
+    }
+  }
+
+  animations() {
+    if (this.startTime < 0) {
+      this.startTime = Date.now();
+
+      return;
+    }
+
+    const nowTime = Date.now();
+    const time = (nowTime - this.startTime) * 0.001;
+
+    animationLeaf(time, this.leaf1, 0.03, 0.075);
+    animationLeaf(time, this.leaf2, 0.015, 0.05);
+  }
+
+  toggleAnimations() {
+    document.body.addEventListener(`activeAnimationSlide2`, () => {
+      this.animationStart = true;
+      this.loop();
+    });
+
+    document.body.addEventListener(`activeAnimationSlide1`, () => {
+      this.animationStart = false;
+      this.startTime = -1;
     });
   }
 }
