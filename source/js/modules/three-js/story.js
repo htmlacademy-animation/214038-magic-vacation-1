@@ -161,6 +161,8 @@ export default class Story extends ThreeJsCanvas {
         }, 100);
       }
 
+      this.createEvent(`activeAnimationSlide1`);
+
       this.firstLoaded = false;
       this.isAnimation = true;
       this.setCamera(90, true);
@@ -237,12 +239,16 @@ export default class Story extends ThreeJsCanvas {
 
     if (sceneID === 0) {
       angle = 90;
+      this.createEvent(`activeAnimationSlide1`);
     } else if (sceneID === 1) {
       angle = 0;
+      this.createEvent(`activeAnimationSlide2`);
     } else if (sceneID === 2) {
       angle = -90;
+      this.createEvent(`activeAnimationSlide3`);
     } else if (sceneID === 3) {
       angle = 180;
+      this.createEvent(`activeAnimationSlide4`);
     }
 
     // запускем функцию, где определяется что второй слайд и запускаются эффекты для второго слайда
@@ -428,6 +434,12 @@ export default class Story extends ThreeJsCanvas {
 
   animateSuitcase() {
     const animationSuitcase = new AnimationSuitcase(this.suitcase);
+  }
+
+  createEvent(name) {
+    const event = new Event(name);
+
+    document.body.dispatchEvent(event);
   }
 
   render() {

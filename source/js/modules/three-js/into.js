@@ -2,7 +2,7 @@ import ThreeJsCanvas from "./three-js-canvas";
 import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import IntroScene from "./scenes/intro-scene";
-import {animateIntroObjects} from "./scenes/helpers/animate-object";
+import {animateIntroObjects} from "./scenes/helpers/animate-intro-objects";
 import {meshObjects} from "./scenes/intro-scene";
 
 export default class Intro extends ThreeJsCanvas {

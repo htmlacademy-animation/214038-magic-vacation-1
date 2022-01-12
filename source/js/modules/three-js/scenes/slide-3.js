@@ -6,10 +6,16 @@ import {colors} from "./helpers/colors";
 import {reflectivity} from "./helpers/reflectivity";
 import {loadModel} from "../3D/model-loader";
 import Floor from "./objects/floor";
+import {animationCompass} from "./helpers/animate-other-objects";
 
 class Scene3Slide extends THREE.Group {
   constructor() {
     super();
+
+    this.animationStart = false;
+    this.startTime = -1;
+
+    this.loop = this.loop.bind(this);
 
     this.constructChildren();
   }
@@ -21,6 +27,7 @@ class Scene3Slide extends THREE.Group {
     this.getFloor();
     this.addSceneStatic();
     this.getCompass();
+    this.toggleAnimations();
   }
 
   addSnowMan() {
@@ -71,7 +78,46 @@ class Scene3Slide extends THREE.Group {
     loadModel(name, null, (mesh) => {
       mesh.name = name;
 
+      this.compass = mesh;
       this.add(mesh);
+    });
+  }
+
+  loop() {
+    this.animations();
+
+    if (this.animationStart) {
+      requestAnimationFrame(this.loop);
+    } else {
+      cancelAnimationFrame(this.loop);
+    }
+  }
+
+  animations() {
+    if (this.startTime < 0) {
+      this.startTime = Date.now();
+
+      return;
+    }
+
+    const nowTime = Date.now();
+    const time = (nowTime - this.startTime) * 0.001;
+
+    animationCompass(time, 0.2, this.compass.getObjectByName(`ArrowCenter`));
+  }
+
+  toggleAnimations() {
+    document.body.addEventListener(`activeAnimationSlide3`, () => {
+      this.animationStart = true;
+      this.loop();
+    });
+
+    document.body.addEventListener(`activeAnimationSlide2`, () => {
+      this.animationStart = false;
+    });
+
+    document.body.addEventListener(`activeAnimationSlide4`, () => {
+      this.animationStart = false;
     });
   }
 }
