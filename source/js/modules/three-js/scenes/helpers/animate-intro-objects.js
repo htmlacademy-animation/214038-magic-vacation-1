@@ -11,6 +11,21 @@ export const animateIntroObjects = (animateObjects) => {
   });
 };
 
+const addFluctuation = (item, config) => {
+  let progress = 0;
+  let startTime = Date.now();
+
+  function loop() {
+    progress = (Date.now() - startTime) * 0.0001;
+    item.position.y = item.position.y + config.amp * Math.sin((2 * Math.PI * progress) / config.period);
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+
+};
+
 class AnimateIntroObjects extends THREE.Group {
   constructor(object) {
     super();
@@ -81,7 +96,7 @@ class AnimateIntroObjects extends THREE.Group {
     const easing = _.easeOutCubic(progress);
 
     if (progress > 1) {
-      this.animateFluctuationObject();
+      addFluctuation(this.objectfluctuation, this.config);
       this.animationStop = true;
 
       return;
@@ -103,19 +118,95 @@ class AnimateIntroObjects extends THREE.Group {
     this.objectMotion.position.set(positionX, positionY, positionZ);
     this.object.rotation.set(rotationX, rotationY, rotationZ);
   }
+}
 
-  animateFluctuationObject() {
-    let progress = 0;
-    let startTime = Date.now();
-    let self = this;
+const animationSuitcaseConfig = {
+  startScale: [0, 0, 0],
+  finishScale: [0.6, 0.6, 0.6],
+  startPosition: [0, 0, 100],
+  finishPosition: [-70, -150, 400],
+  startRotation: [-100, 0, 0],
+  finishRotation: [20, -50, -10],
+  amp: -0.33,
+  period: 0.25
+};
 
-    function loop() {
-      progress = (Date.now() - startTime) * 0.0001;
-      self.objectfluctuation.position.y = self.objectfluctuation.position.y + self.config.amp * Math.sin((2 * Math.PI * progress) / self.config.period);
+export class AnimationSuitcaseIntro extends THREE.Group {
+  constructor(object) {
+    super();
+    this.object = object;
 
-      requestAnimationFrame(loop);
+    this.startTime = -1;
+    this.animationStop = false;
+
+    this.loop = this.loop.bind(this);
+
+    this.init();
+  }
+
+  init() {
+    setTimeout(() => {
+      this.loop();
+    }, 600);
+  }
+
+  loop() {
+    this.update();
+
+    if (this.animationStop) {
+      cancelAnimationFrame(this.loop);
+    } else {
+      requestAnimationFrame(this.loop);
+    }
+  }
+
+  update() {
+    if (this.startTime < 0) {
+      this.startTime = Date.now();
+
+      return;
     }
 
-    loop();
+    const nowTime = Date.now();
+    const time = (nowTime - this.startTime) * 0.001;
+
+    this.animationShowSuitcase(time);
+  }
+
+  animationShowSuitcase(time) {
+    let progress = time / 2;
+    const easing = _.easeOutCubic(progress);
+
+    if (progress > 1) {
+      addFluctuation(this.object, animationSuitcaseConfig);
+      this.animationStop = true;
+
+      return;
+    }
+
+    const moveGroup = this.object.getObjectByName(`move`);
+    const scaleGroup = this.object.getObjectByName(`scale`);
+    const groupRotation = this.object.getObjectByName(`rotation`);
+    const groupPositionXY = this.object.getObjectByName(`positionXY`);
+
+    const scaleX = tick(animationSuitcaseConfig.startScale[0], animationSuitcaseConfig.finishScale[0], easing);
+    const scaleY = tick(animationSuitcaseConfig.startScale[1], animationSuitcaseConfig.finishScale[1], easing);
+    const scaleZ = tick(animationSuitcaseConfig.startScale[2], animationSuitcaseConfig.finishScale[2], easing);
+
+    const positionX = tick(animationSuitcaseConfig.startPosition[0], animationSuitcaseConfig.finishPosition[0], easing);
+    const positionY = tick(animationSuitcaseConfig.startPosition[1], animationSuitcaseConfig.finishPosition[1], easing);
+    const positionZ = tick(animationSuitcaseConfig.startPosition[2], animationSuitcaseConfig.finishPosition[2], easing);
+
+    const rotationX = tick(animationSuitcaseConfig.startRotation[0], animationSuitcaseConfig.finishRotation[0], easing);
+    const rotationY = tick(animationSuitcaseConfig.startRotation[1], animationSuitcaseConfig.finishRotation[1], easing);
+    const rotationZ = tick(animationSuitcaseConfig.startRotation[2], animationSuitcaseConfig.finishRotation[2], easing);
+
+    const positionOnlyX = 30 * Math.sin((1.5 * Math.PI * easing) / 1.5);
+    const positionOnlyY = 120 * Math.sin((1.5 * Math.PI * easing) / 1.5);
+
+    scaleGroup.scale.set(scaleX, scaleY, scaleZ);
+    moveGroup.position.set(positionX, positionY, positionZ);
+    groupRotation.rotation.copy(new THREE.Euler(rotationX * THREE.Math.DEG2RAD, rotationY * THREE.Math.DEG2RAD, rotationZ * THREE.Math.DEG2RAD));
+    groupPositionXY.position.set(positionOnlyX, positionOnlyY, 0);
   }
 }

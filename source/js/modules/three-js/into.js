@@ -2,7 +2,7 @@ import ThreeJsCanvas from "./three-js-canvas";
 import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import IntroScene from "./scenes/intro-scene";
-import {animateIntroObjects} from "./scenes/helpers/animate-intro-objects";
+import {animateIntroObjects, AnimationSuitcaseIntro} from "./scenes/helpers/animate-intro-objects";
 import {meshObjects} from "./scenes/intro-scene";
 
 export default class Intro extends ThreeJsCanvas {
@@ -149,6 +149,15 @@ export default class Intro extends ThreeJsCanvas {
       if (!stopTimer) {
         clearInterval(timerId);
         animateIntroObjects(this.objectsArray);
+      }
+    }, 100);
+
+    let timerId2 = setInterval(() => {
+      this.suitcase = meshObjects.suitcase;
+
+      if (this.suitcase) {
+        clearInterval(timerId2);
+        const animationSuitcaseIntro = new AnimationSuitcaseIntro(this.suitcase);
       }
     }, 100);
   }
