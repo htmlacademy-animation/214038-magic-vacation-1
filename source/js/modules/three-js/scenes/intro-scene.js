@@ -32,7 +32,7 @@ export default class IntroScene extends THREE.Group {
     const plane = new THREE.PlaneGeometry(500, 500);
     const planeMesh = new THREE.Mesh(plane, setMaterial({color: colors.Purple, ...reflectivity.basic, flatShading: true}));
 
-    planeMesh.position.set(0, 0, 5);
+    planeMesh.position.set(0, 0, -200);
     this.add(planeMesh);
   }
 
@@ -104,10 +104,19 @@ export default class IntroScene extends THREE.Group {
 
     loadModel(name, material, (mesh) => {
       mesh.name = name;
-      mesh.position.set(150, 80, 100);
-      mesh.rotation.copy(new THREE.Euler(80 * THREE.Math.DEG2RAD, 120 * THREE.Math.DEG2RAD, -30 * THREE.Math.DEG2RAD), `XYZ`);
 
-      this.add(mesh);
+      const groupOuter = new THREE.Group();
+
+      groupOuter.name = `groupOuter`;
+      groupOuter.position.set(180, 0, -70);
+      mesh.rotation.copy(new THREE.Euler(-60 * THREE.Math.DEG2RAD, -65 * THREE.Math.DEG2RAD, -120 * THREE.Math.DEG2RAD), `XYZ`);
+      mesh.scale.set(0.2, 0.2, 0.2);
+
+      groupOuter.add(mesh);
+
+      meshObjects.airplane = groupOuter;
+
+      this.add(groupOuter);
     });
   }
 
