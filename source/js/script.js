@@ -10,7 +10,7 @@ import social from './modules/social.js';
 import FullPageScroll from './modules/full-page-scroll';
 import base from './modules/base';
 import AccentTypographyBuild from './modules/text-animation';
-import Intro from "./modules/three-js/into";
+import IntroAndStory from "./modules/three-js/intro-and-story";
 
 // init modules
 mobileHeight();
@@ -23,13 +23,9 @@ form();
 social();
 base();
 
-const intro = new Intro(`canvas-homepage`);
+const introAndStory = new IntroAndStory(`canvas-intro-story`);
 
-document.body.addEventListener(`screenChanged`, (event) => {
-  if (event.detail.screenName === `top`) {
-    intro.init();
-  }
-});
+introAndStory.init();
 
 const fullPageScroll = new FullPageScroll();
 fullPageScroll.init();
@@ -38,3 +34,5 @@ const animationIntroTitle = new AccentTypographyBuild(`.intro__title`, 500, `act
 const animationContestDate = new AccentTypographyBuild(`.intro__date`, 500, `active-animation`, `transform`, true, 700);
 const animationHistoryTitle = new AccentTypographyBuild(`.slider__item-title`, 500, `active-animation`, `transform`, true, 0);
 const animationPrizesTitle = new AccentTypographyBuild(`.prizes__title`, 500, `active-animation`, `transform`, true, 0);
+
+export {introAndStory};

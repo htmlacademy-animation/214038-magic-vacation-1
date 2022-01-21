@@ -32,6 +32,7 @@ export default class IntroScene extends THREE.Group {
     const plane = new THREE.PlaneGeometry(500, 500);
     const planeMesh = new THREE.Mesh(plane, setMaterial({color: colors.Purple, ...reflectivity.basic, flatShading: true}));
 
+    planeMesh.name = `boardMesh`;
     planeMesh.position.set(0, 0, -200);
     this.add(planeMesh);
   }

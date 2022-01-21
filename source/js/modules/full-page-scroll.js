@@ -17,6 +17,7 @@ export default class FullPageScroll {
     this.counterAnimation = null;
     this.counterCasesAnimation = null;
     this.counterCodesAnimation = null;
+    this.introScene = null;
   }
 
   init() {
@@ -63,6 +64,10 @@ export default class FullPageScroll {
     const bgClass = `fill-bg`;
 
     this.screenElements.forEach((screen) => {
+      if (screen.id === `top` && screen.classList.contains(activeClass)) {
+        this.introScene = true;
+      }
+
       if (screen.id === `story` && screen.classList.contains(activeClass)) {
         isHistoryScreen = true;
         screen.classList.remove(activeClass);
@@ -110,18 +115,24 @@ export default class FullPageScroll {
       const event = new Event(`activeStory`);
 
       document.body.dispatchEvent(event);
-    } else {
-      const event = new Event(`notActiveStory`);
 
-      document.body.dispatchEvent(event);
+      if (this.introScene) {
+        const eventa = new Event(`activeStoryFromIntro`);
+
+        document.body.dispatchEvent(eventa);
+
+        this.introScene = false;
+      }
     }
 
     if (this.screenElements[this.activeScreen][`id`] === `top`) {
       const event = new Event(`activeIntro`);
 
       document.body.dispatchEvent(event);
-    } else {
-      const event = new Event(`notActiveIntro`);
+    }
+
+    if (!(this.screenElements[this.activeScreen][`id`] === `top`) && !(this.screenElements[this.activeScreen][`id`] === `story`)) {
+      const event = new Event(`notActiveIntroAndStory`);
 
       document.body.dispatchEvent(event);
     }
