@@ -1,12 +1,8 @@
 import Swiper from "swiper";
-import Story from "./three-js/story";
+import {introAndStory} from "../script";
 
 export default () => {
   let storySlider;
-
-  const story = new Story(`canvas-story`);
-
-  story.init();
 
   const setSlider = function () {
     const body = document.body;
@@ -23,13 +19,13 @@ export default () => {
         on: {
           slideChange: () => {
             if (storySlider.activeIndex === 0 || storySlider.activeIndex === 1) {
-              story.setScene(0);
+              introAndStory.setStory(0);
             } else if (storySlider.activeIndex === 2 || storySlider.activeIndex === 3) {
-              story.setScene(1);
+              introAndStory.setStory(1);
             } else if (storySlider.activeIndex === 4 || storySlider.activeIndex === 5) {
-              story.setScene(2);
+              introAndStory.setStory(2);
             } else if (storySlider.activeIndex === 6 || storySlider.activeIndex === 7) {
-              story.setScene(3);
+              introAndStory.setStory(3);
             }
           },
           resize: () => {
@@ -60,19 +56,19 @@ export default () => {
             if (storySlider.activeIndex === 0) {
               body.classList.remove(`second`, `third`, `fourth`);
               body.classList.add(`first`);
-              story.setScene(0);
+              introAndStory.setStory(0);
             } else if (storySlider.activeIndex === 2) {
               body.classList.remove(`first`, `third`, `fourth`);
               body.classList.add(`second`);
-              story.setScene(1);
+              introAndStory.setStory(1);
             } else if (storySlider.activeIndex === 4) {
               body.classList.remove(`first`, `second`, `fourth`);
               body.classList.add(`third`);
-              story.setScene(2);
+              introAndStory.setStory(2);
             } else if (storySlider.activeIndex === 6) {
               body.classList.add(`fourth`);
               body.classList.remove(`first`, `third`, `second`);
-              story.setScene(3);
+              introAndStory.setStory(3);
             }
           },
           resize: () => {

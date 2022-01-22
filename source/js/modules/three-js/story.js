@@ -1,4 +1,5 @@
-import ThreeJsCanvas from "./three-js-canvas";
+// файл не нужен сейчас и нигде не используется, сохранен чтобы потом полезный код перенести
+
 import * as THREE from "three";
 import {storyRowShaderMaterial} from "./materials/simple-raw-shader-material";
 import AllStories from "./scenes/story-scenes-all";
@@ -31,12 +32,9 @@ export const setMaterial = (options = {}) => {
   });
 };
 
-export default class Story extends ThreeJsCanvas {
+export default class Story {
   constructor(canvasId) {
-    super({
-      canvasId
-    });
-
+    this.canvasId = canvasId;
     this.render = this.render.bind(this);
     this.isAnimation = true;
 

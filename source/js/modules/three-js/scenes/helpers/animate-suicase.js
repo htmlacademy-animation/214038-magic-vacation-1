@@ -1,9 +1,9 @@
 import _ from '../../../canvas/utils';
 
 const animateConfig = {
-  durationMove: 0.7,
-  startY: 100,
-  finishY: -10,
+  durationMove: 0.5,
+  startY: -300,
+  finishY: -505,
   initialScale: 1,
   minScale: 0.85,
   maxScale: 1.15
@@ -49,11 +49,13 @@ export default class AnimationSuitcase {
     const nowTime = Date.now();
     const time = (nowTime - this.startTime) * 0.001;
 
-    this.updatePositionY(time);
-
     setTimeout(() => {
-      this.updateScale(time);
-    }, 100);
+      this.updatePositionY(time);
+
+      setTimeout(() => {
+        this.updateScale(time);
+      }, 100);
+    }, 300);
   }
 
   updatePositionY(time) {
@@ -70,7 +72,7 @@ export default class AnimationSuitcase {
   }
 
   updateScale(time) {
-    let progress = time / 1.2;
+    let progress = time / 0.8;
     const easing = _.easeLinear(progress);
 
     let scaleX = animateConfig.initialScale;
@@ -79,6 +81,7 @@ export default class AnimationSuitcase {
 
     if (progress > 1) {
       this.startTimeScale = -1;
+      this.animationScaleStop = true;
 
       return;
     }

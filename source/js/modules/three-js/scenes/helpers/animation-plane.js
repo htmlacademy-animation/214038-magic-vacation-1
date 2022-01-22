@@ -5,10 +5,26 @@ const animateConfig = {
   durationScale: 2,
   startPosition: [0, 0, -50],
   initialScale: 0.2,
-  finalScale: 1
+  finalScale: 1,
+  amp: 1,
+  period: 0.5
 };
 
 const tick = (from, to, progress) => from + progress * (to - from);
+
+const addFluctuation = (item) => {
+  let progress = 0;
+  let startTime = Date.now();
+
+  function loop() {
+    progress = (Date.now() - startTime) * 0.0001;
+    item.position.y = item.position.y + animateConfig.amp * Math.sin((2 * Math.PI * progress) / animateConfig.period);
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+};
 
 export class AnimationAirplane extends THREE.Group {
   constructor(object) {
@@ -94,8 +110,11 @@ export class AnimationAirplane extends THREE.Group {
   loop() {
     this.update();
 
-
-    requestAnimationFrame(this.loop);
+    if (this.animationStop) {
+      cancelAnimationFrame(this.loop);
+    } else {
+      requestAnimationFrame(this.loop);
+    }
   }
 
   update() {
@@ -113,10 +132,11 @@ export class AnimationAirplane extends THREE.Group {
 
   animationPlain(time) {
     const progress = time / animateConfig.durationScale;
-    const easing = _.easeInCubic(progress);
+    const easing = _.easeOutCubic(progress);
 
     if (progress > 1) {
-      this.animationScaleStop = true;
+      this.animationStop = true;
+      addFluctuation(this.outerAxis);
 
       return;
     }
@@ -132,11 +152,11 @@ export class AnimationAirplane extends THREE.Group {
     ];
 
     if (progress > 0.5 && progress < 0.7) {
-      this.planeRotationY = Math.sin((Math.PI * time) / 1.5) * 4;
+      this.planeRotationY = Math.sin((Math.PI * time) / 1.5) * 7;
     }
 
     if (progress > 0.7) {
-      this.planeRotationZ = Math.cos((Math.PI * time) / 1.5) * 2;
+      this.planeRotationZ = Math.cos((Math.PI * time) / 1.5) * 4;
     }
 
     this.planeScale = [scaleX, scaleY, scaleZ];
