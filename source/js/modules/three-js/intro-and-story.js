@@ -63,6 +63,7 @@ export default class IntroAndStory {
 
     this.camera = new THREE.PerspectiveCamera(45, this.aspectRation, 0.1, 20000);
 
+    // пока что отключил
     // this.controls = new OrbitControls(this.camera, document.getElementById(`top`));
 
     this.addScene();
