@@ -25,20 +25,28 @@ export default class CameraRig extends THREE.Group {
     this.positionFinishTruckZ = 0;
 
     this.rotationStartTruckZ = 0;
-    this.rotationFinishtTruckZ = -0.2;
+    this.rotationFinishtTruckZ = -0.335;
 
     this.initCameraPostionIntro = 1405;
     this._positionTruck = 1405;
+
+    this.isIntroScreen = true;
+
+    this.finishPositionCamera = [136, 0, 0];
+    this.finishRorationCamera = 0;
 
     this.constructRigElements();
   }
 
   constructRigElements() {
     let cameraGroup = new THREE.Group();
+    let cameraGroupMouseRotationRig = new THREE.Group();
 
     this.add(cameraGroup);
-    cameraGroup.add(this.camera);
+    cameraGroup.add(cameraGroupMouseRotationRig);
+    cameraGroupMouseRotationRig.add(this.camera);
     this.cameraGroup = cameraGroup;
+    this.cameraGroupMouseRotationRig = cameraGroupMouseRotationRig;
   }
 
   get rotationTruck() {
@@ -98,20 +106,26 @@ export default class CameraRig extends THREE.Group {
     this.camera.rotation.x = 0;
     this.cameraGroup.rotation.y = 0;
     this.cameraGroup.position.set(0, 0, 0);
+    this.camera.lookAt(this.introScene.position.x, this.introScene.position.y, this.introScene.position.z);
+    this.isIntroScreen = true;
   }
 
   setCameraFromIntroToStory() {
     this.startCamera = true;
+    this.camera.lookAt(this.storyScene.position.x, this.storyScene.position.y, this.storyScene.position.z);
     this.positionStartTruckZ = this.camera.position.z;
-    this.positionFinishTruckZ = -620;
+    this.positionFinishTruckZ = -680;
     this.durationAnimateion = 0.5;
+    this.isIntroScreen = false;
   }
 
   toStoryWithoutAnimation() {
-    this.camera.rotation.x = -0.2;
-    this.camera.position.z = -611;
-    this.cameraGroup.position.set(...this.finishPositionCamera)
+    this.camera.rotation.x = this.rotationFinishtTruckZ;
+    this.camera.position.z = -680;
+    this.cameraGroup.position.set(...this.finishPositionCamera);
     this.cameraGroup.rotation.y = this.finishRorationCamera;
+    this.camera.lookAt(this.storyScene.position.x, this.storyScene.position.y, this.storyScene.position.z);
+    this.isIntroScreen = false;
   }
 
   setCameraStory(finishAngle, finishRotate) {
@@ -119,6 +133,17 @@ export default class CameraRig extends THREE.Group {
     this.finishAngle = finishAngle;
     this.finishRotate = finishRotate;
     this.durationAnimateion = 0.5;
+    this.isIntroScreen = false;
+  }
+
+  setCameraRotation(ratio) {
+    this.cameraGroupMouseRotationRig.position.y = ratio * 50;
+
+    if (this.isIntroScreen) {
+      this.camera.lookAt(this.introScene.position.x, this.introScene.position.y, this.introScene.position.z);
+    } else {
+      this.camera.lookAt(this.storyScene.position.x, this.storyScene.position.y, this.storyScene.position.z);
+    }
   }
 
   update() {
@@ -187,7 +212,6 @@ export default class CameraRig extends THREE.Group {
 
       this.finishPositionCamera = this.positionTruckInStory;
       this.finishRorationCamera = this.rotationTruckInStory;
-
       return;
     }
 

@@ -6,7 +6,7 @@ const animateConfig = {
   startPosition: [0, 0, -50],
   initialScale: 0.2,
   finalScale: 1,
-  amp: 1,
+  amp: 0.55,
   period: 0.5
 };
 

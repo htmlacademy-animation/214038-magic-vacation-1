@@ -79,6 +79,8 @@ export default class IntroAndStory {
     this.cameraRig.addChild(lights);
     this.getSuitcase();
 
+    this.addMotionByCursor();
+
     this.render();
     this.startAnimations();
     this.toggleRendering();
@@ -101,7 +103,7 @@ export default class IntroAndStory {
   addSceneStory() {
     const sceneAllStory = new AllStories();
 
-    sceneAllStory.position.set(0, -500, -2550);
+    sceneAllStory.position.set(0, -650, -2550);
     sceneAllStory.rotation.copy(new THREE.Euler(0, -45 * THREE.Math.DEG2RAD, 0));
 
     this.SceneAllStory = sceneAllStory;
@@ -149,6 +151,16 @@ export default class IntroAndStory {
 
     document.body.addEventListener(`notActiveIntroAndStory`, () => {
       this.isAnimation = false;
+    });
+  }
+
+  addMotionByCursor() {
+    document.addEventListener(`mousemove`, (e) => {
+      let mouseY = e.pageY;
+      let windowH = window.innerHeight;
+      let ratio = 1 - (2 * mouseY / windowH);
+
+      this.cameraRig.setCameraRotation(ratio);
     });
   }
 
@@ -298,7 +310,7 @@ export default class IntroAndStory {
 
     loadModel(name, null, (mesh) => {
       mesh.name = name;
-      mesh.position.set(-260, -300, -1700);
+      mesh.position.set(-260, -450, -1700);
       mesh.rotation.copy(new THREE.Euler(0, -25 * THREE.Math.DEG2RAD, 0));
 
       suitcaseGroup.add(mesh);
