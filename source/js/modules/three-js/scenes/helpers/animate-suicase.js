@@ -2,8 +2,8 @@ import _ from '../../../canvas/utils';
 
 const animateConfig = {
   durationMove: 0.5,
-  startY: -300,
-  finishY: -505,
+  startY: -450,
+  finishY: -655,
   initialScale: 1,
   minScale: 0.85,
   maxScale: 1.15

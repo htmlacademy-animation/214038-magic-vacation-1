@@ -20,7 +20,7 @@ const introConfig = {
     finishPosition: [-480, 370, 100],
     startRotation: [-1, -1, -1],
     finishRotation: [0.17, 0.52, 0.17],
-    amp: 1,
+    amp: 0.65,
     period: 0.5
   },
   question: {
@@ -56,8 +56,8 @@ const introConfig = {
     finishPosition: [-500, -280, 40],
     startRotation: [-1, -1, -1],
     finishRotation: [-0.17, 0, 2.26],
-    amp: 2,
-    period: 1
+    amp: 0.3,
+    period: 0.7
   }
 };
 
