@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import IntroScene from "./scenes/intro-scene";
-import {animateIntroObjects, AnimationSuitcaseIntro} from "./scenes/helpers/animate-intro-objects";
+import {animateIntroObjects, AnimationSuitcaseIntro, setPositionIntroObj} from "./scenes/helpers/animate-intro-objects";
 import {meshObjects} from "./scenes/intro-scene";
 import {AnimationAirplane} from "./scenes/helpers/animation-plane";
 import AllStories from "./scenes/story-scenes-all";
@@ -56,12 +56,16 @@ export default class IntroAndStory {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.width, this.height);
 
+    this.isLandscape = window.innerHeight < window.innerWidth;
+
     if (!isMobile) {
       this.renderer.shadowMap.enabled = true;
       this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      this.camera = new THREE.PerspectiveCamera(45, this.aspectRation, 0.1, 20000);
+    } else {
+      this.camera = new THREE.PerspectiveCamera(60, this.aspectRation, 0.1, 20000);
     }
 
-    this.camera = new THREE.PerspectiveCamera(45, this.aspectRation, 0.1, 20000);
 
     // пока что отключил
     // this.controls = new OrbitControls(this.camera, document.getElementById(`top`));
@@ -69,6 +73,7 @@ export default class IntroAndStory {
     this.addScene();
 
     this.cameraRig = new CameraRig(this.camera, this.introGroupObj, this.SceneAllStory);
+    this.cameraRig.setIsLandscape(this.isLandscape);
 
     this.scene.add(this.cameraRig);
 
@@ -299,7 +304,7 @@ export default class IntroAndStory {
 
       if (this.airplane) {
         clearInterval(timerId3);
-        const animationAirplane = new AnimationAirplane(this.airplane);
+        this.animationAirplane = new AnimationAirplane(this.airplane);
       }
     }, 100);
   }
@@ -333,13 +338,45 @@ export default class IntroAndStory {
   }
 
   updateSize() {
+    const minFov = 45;
+    const maxFov = 80;
+
+    this.isLandscape = window.innerHeight < window.innerWidth;
+
     this.width = window.innerWidth;
     this.height = window.innerHeight;
 
     this.canvas.width = this.width;
     this.canvas.height = this.height;
 
+    this.aspectRationPrev = this.aspectRation;
     this.aspectRation = this.width / this.height;
+
+    this.cameraRig.setIsLandscape(this.isLandscape);
+
+    if (!this.isLandscape) {
+      if (this.aspectRationPrev > this.aspectRation) {
+        this.camera.fov += this.aspectRation + 0.3;
+
+        if (this.camera.fov >= maxFov) {
+          this.camera.fov = maxFov;
+        }
+      } else {
+        this.camera.fov -= this.aspectRation - 0.3;
+
+        if (this.camera.fov <= minFov) {
+          this.camera.fov = minFov;
+        }
+      }
+
+      setPositionIntroObj(this.objectsArray, this.isLandscape);
+      this.animationAirplane.setPositionIntroPlane(this.isLandscape);
+    } else {
+      this.camera.fov = 45;
+
+      setPositionIntroObj(this.objectsArray, this.isLandscape);
+      this.animationAirplane.setPositionIntroPlane(this.isLandscape);
+    }
 
     this.camera.aspect = this.aspectRation;
     this.camera.updateProjectionMatrix();

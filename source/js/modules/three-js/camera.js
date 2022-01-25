@@ -114,14 +114,14 @@ export default class CameraRig extends THREE.Group {
     this.startCamera = true;
     this.camera.lookAt(this.storyScene.position.x, this.storyScene.position.y, this.storyScene.position.z);
     this.positionStartTruckZ = this.camera.position.z;
-    this.positionFinishTruckZ = -680;
+    this.positionFinishTruckZ = this.isLandscape ? -680 : -780;
     this.durationAnimateion = 0.5;
     this.isIntroScreen = false;
   }
 
   toStoryWithoutAnimation() {
     this.camera.rotation.x = this.rotationFinishtTruckZ;
-    this.camera.position.z = -680;
+    this.camera.position.z = this.isLandscape ? -680 : -780;
     this.cameraGroup.position.set(...this.finishPositionCamera);
     this.cameraGroup.rotation.y = this.finishRorationCamera;
     this.camera.lookAt(this.storyScene.position.x, this.storyScene.position.y, this.storyScene.position.z);
@@ -144,6 +144,10 @@ export default class CameraRig extends THREE.Group {
     } else {
       this.camera.lookAt(this.storyScene.position.x, this.storyScene.position.y, this.storyScene.position.z);
     }
+  }
+
+  setIsLandscape(isLandscape) {
+    this.isLandscape = isLandscape;
   }
 
   update() {
@@ -244,6 +248,6 @@ export default class CameraRig extends THREE.Group {
   }
 
   addChild(item) {
-    this.cameraGroup.add(item)
+    this.cameraGroup.add(item);
   }
 }

@@ -173,6 +173,8 @@ export class AnimationAirplane extends THREE.Group {
     if (this.positionChanged) {
       this.outerAxis.position.set(...this.planePosition);
       this.positionChanged = false;
+
+      this.finishPositionX = this.outerAxis.position.x;
     }
 
     if (this._rotationChangedZ) {
@@ -183,6 +185,14 @@ export class AnimationAirplane extends THREE.Group {
     if (this._rotationChangedY) {
       this.plain.rotation.y += (2 * THREE.Math.DEG2RAD * (this.planeRotationY));
       this._rotationChangedY = false;
+    }
+  }
+
+  setPositionIntroPlane(isLandscape) {
+    if (isLandscape) {
+      this.outerAxis.position.set(this.finishPositionX, this.outerAxis.position.y, this.outerAxis.position.z);
+    } else {
+      this.outerAxis.position.set(this.finishPositionX - 100, this.outerAxis.position.y, this.outerAxis.position.z);
     }
   }
 }

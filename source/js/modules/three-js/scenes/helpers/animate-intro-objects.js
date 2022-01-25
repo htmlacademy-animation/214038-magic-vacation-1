@@ -2,6 +2,11 @@ import animationConfig from "./animation-config";
 import * as THREE from "three";
 import _ from '../../../canvas/utils';
 
+
+const detectLess1024 = () => {
+  return window.innerWidth < 1024;
+};
+
 const tick = (from, to, progress) => from + progress * (to - from);
 
 export const animateIntroObjects = (animateObjects) => {
@@ -94,6 +99,9 @@ class AnimateIntroObjects extends THREE.Group {
   updateObjectParameters(time) {
     let progress = time / this.config.duration;
     const easing = _.easeOutCubic(progress);
+    const finishPositionX = detectLess1024() ? this.config.finishPositionLandscape[0] : this.config.finishPosition[0];
+    const finishPositionY = detectLess1024() ? this.config.finishPositionLandscape[1] : this.config.finishPosition[1];
+    const finishPositionZ = detectLess1024() ? this.config.finishPositionLandscape[2] : this.config.finishPosition[2];
 
     if (progress > 1) {
       addFluctuation(this.objectfluctuation, this.config);
@@ -102,9 +110,9 @@ class AnimateIntroObjects extends THREE.Group {
       return;
     }
 
-    const positionX = tick(this.config.startPosition[0], this.config.finishPosition[0], easing);
-    const positionY = tick(this.config.startPosition[1], this.config.finishPosition[1], easing);
-    const positionZ = tick(this.config.startPosition[2], this.config.finishPosition[2], easing);
+    const positionX = tick(this.config.startPosition[0], finishPositionX, easing);
+    const positionY = tick(this.config.startPosition[1], finishPositionY, easing);
+    const positionZ = tick(this.config.startPosition[2], finishPositionZ, easing);
 
     const scaleX = tick(this.config.startScale[0], this.config.finishScale[0], easing);
     const scaleY = tick(this.config.startScale[1], this.config.finishScale[1], easing);
@@ -233,4 +241,18 @@ export const animOpacity = (item, finish, duration) => {
   }
 
   loop();
+};
+
+export const setPositionIntroObj = (items, isLandscape) => {
+  let finishPosition;
+
+  items.forEach((item) => {
+    if (isLandscape) {
+      finishPosition = animationConfig[item.name].finishPosition;
+    } else {
+      finishPosition = animationConfig[item.name].finishPositionLandscape;
+    }
+
+    item.parent.position.set(...finishPosition);
+  });
 };
