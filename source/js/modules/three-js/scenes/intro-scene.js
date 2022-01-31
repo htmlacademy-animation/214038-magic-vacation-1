@@ -164,6 +164,7 @@ export default class IntroScene extends THREE.Group {
     group.name = name;
     group.add(child);
 
+
     return group;
   }
 }
