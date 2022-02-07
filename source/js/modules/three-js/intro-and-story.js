@@ -390,6 +390,8 @@ export default class IntroAndStory {
       cancelAnimationFrame(this.render);
     }
 
+    this.controls.update();
+
     this.cameraRig.update();
 
     stats.begin();
