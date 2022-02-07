@@ -68,7 +68,7 @@ export default class IntroAndStory {
 
 
     // пока что отключил
-    // this.controls = new OrbitControls(this.camera, document.getElementById(`top`));
+    this.controls = new OrbitControls(this.camera, document.getElementById(`top`));
 
     this.addScene();
 
